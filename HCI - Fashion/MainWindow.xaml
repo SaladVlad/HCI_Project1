@@ -1,0 +1,176 @@
+﻿<Window x:Class="HCI___Fashion.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:fa5="http://schemas.fontawesome.com/icons/"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HCI___Fashion"
+        mc:Ignorable="d"
+        Title="80s Male Fashion Sets" 
+        SizeToContent="WidthAndHeight"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+    <Canvas Width="900" Height="500">
+
+        <Path x:Name="UIPath"
+              Stroke="DarkCyan"
+              StrokeThickness="5">
+            <Path.Fill>
+                <ImageBrush ImageSource="/ImgSourceUI/Backdrop.jpg" />
+            </Path.Fill>
+            <Path.Data>
+                <PathGeometry>
+                    <PathFigure StartPoint="250,0">
+
+                        <ArcSegment
+                            IsLargeArc="False"
+                            Point="250,500"
+                            RotationAngle="180"
+                            Size="250,250"
+                            SweepDirection="Counterclockwise" />
+                        <LineSegment Point="250,500" />
+                        <!--The grooves bottom-->
+                        <LineSegment Point="400,500"/>
+                        <LineSegment Point="425,475"/>
+
+                        <LineSegment Point="450,500"/>
+
+                        <LineSegment Point="475,475"/>
+                        <LineSegment Point="500,500"/>
+                        <!--End of bottom grooves-->
+                        <LineSegment Point="650,500" />
+                        <ArcSegment
+                            IsLargeArc="True"
+                            Point="650,0"
+                            RotationAngle="180"
+                            Size="150,150"
+                            SweepDirection="CounterClockwise" />
+                        <!--The grooves part 2-->
+                        <LineSegment Point="500,0"/>
+                        <LineSegment Point="475,25"/>
+
+                        <LineSegment Point="450,0"/>
+
+                        <LineSegment Point="425,25"/>
+                        <LineSegment Point="400,0"/>
+                        <!--The end of grooves part 2-->
+
+                        <LineSegment Point="250,0" />
+                    </PathFigure>
+                </PathGeometry>
+            </Path.Data>
+        </Path>
+
+        <DockPanel
+            Canvas.Left="0"
+            Canvas.Top="50"
+            Width="900"
+            Height="425">
+            
+            
+            <StackPanel
+                x:Name="DarkModeToggleStackPanel"
+                DockPanel.Dock="Left"
+                VerticalAlignment="Center">
+                <ToggleButton
+                    x:Name="DarkModeToggleButton"
+                    Width="80"
+                    Height="80"
+                    Margin="30 0"
+                    Cursor="Hand">
+                    Dark Mode
+                </ToggleButton>
+            </StackPanel>
+            
+            <StackPanel
+                x:Name="ExitButtonStackPanel"
+                DockPanel.Dock="Right"
+                VerticalAlignment="Center">
+
+                <Button
+                    x:Name="ExitButton"
+                    Width="80"
+                    Height="80"
+                    Margin="30 0"
+                    Cursor="Hand"
+                    Click="ExitButton_Click">
+                    Exit
+                    <Button.Style>
+                        <Style>
+                            
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+            </StackPanel>
+
+            <StackPanel 
+                x:Name="InteractionStackPanel"
+                Margin="10"
+                DockPanel.Dock="Bottom"
+                Orientation="Horizontal">
+                <Grid Width="600">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Button 
+                        x:Name="AddContentButton"
+                        Grid.Column="0" 
+                        HorizontalAlignment="Center"
+                        Width="150"
+                        Height="50"
+                        Visibility="Visible"
+                        FontSize="20"
+                        FontWeight="Bold"
+                        Cursor="Hand">
+                        Add Set
+                    </Button>
+
+                    <Label
+                        Grid.Column="1"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="20"
+                        FontWeight="ExtraBlack"
+                        Foreground="PeachPuff"
+                        Background="#fd7662"
+                        BorderBrush="Black"
+                        BorderThickness="3"
+                        x:Name="AdminModeLabel"
+                        Content="Admin mode">
+                        
+                    </Label>
+                    
+                    <Button 
+                        x:Name="DeleteContentButton"
+                        Grid.Column="2" 
+                        HorizontalAlignment="Center"
+                        Width="150"
+                        Height="50"
+                        FontSize="20"
+                        FontWeight="Bold"
+                        Cursor="Hand">
+                        Remove Set
+                    </Button>
+                </Grid>
+
+            </StackPanel>
+
+
+            <!--the real work begins here-->
+            
+            <DataGrid
+                x:Name="ContentDataGrid"
+                Background="SeaShell">
+
+            </DataGrid>
+        </DockPanel>
+        
+        
+    </Canvas>
+</Window>
