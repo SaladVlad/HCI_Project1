@@ -65,7 +65,7 @@ namespace HCI___Fashion
                 AddContentButton.IsEnabled = false;
                 DeleteContentButton.Visibility = Visibility.Hidden;
                 DeleteContentButton.IsEnabled = false;
-                ModeLabel.Visibility = Visibility.Hidden;
+                ModeLabel.Content = "Viewer mode";
             }
 
             #endregion
