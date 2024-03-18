@@ -5,8 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HCI___Fashion"
         mc:Ignorable="d"
-        Title="CreateOrEditWindow" Height="450" Width="800">
-    <Grid>
+        Title="Item Creation" 
+        SizeToContent="WidthAndHeight"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+    <Canvas
+        Width="800" Height="500">
+        <Path
+            x:Name="UIPath"
+            Stroke="DarkCyan"
+            StrokeThickness="8"
+            Fill="LightCyan">
+            <Path.Data>
+                <PathGeometry>
+                    <PathFigure StartPoint="0,0">
+                        <LineSegment Point="0,500"/>
+                        <LineSegment/>
+                        <LineSegment/>
+                        <LineSegment/>
+
+                    </PathFigure>
+                </PathGeometry>
+            </Path.Data>
+        </Path>
         
-    </Grid>
+    </Canvas>
 </Window>
