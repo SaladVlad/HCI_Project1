@@ -89,8 +89,11 @@
                     Width="80"
                     Height="80"
                     Margin="30 0"
-                    Cursor="Hand">
-                    Dark Mode
+                    Cursor="Hand"
+                    ToolTip="Dark Mode">
+                    <fa5:SvgAwesome Icon="Solid_Moon"
+                                    Foreground="Black"
+                                    Width="50"/>
                 </ToggleButton>
             </StackPanel>
             
@@ -106,7 +109,10 @@
                     Margin="30 0"
                     Cursor="Hand"
                     Click="ExitButton_Click">
-                    Exit
+                    <fa5:SvgAwesome Height="60"
+                                    Width="50"
+                                    Icon="Regular_WindowClose"
+                                    Foreground="Red"/>
                     <Button.Style>
                         <Style>
                             

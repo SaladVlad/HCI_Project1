@@ -156,7 +156,7 @@ namespace HCI___Fashion
             }
         }
 
-        private void PasswordTextBox_KeyDown(object sender, KeyEventArgs e)
+        private void TextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.Key == Key.Enter)
             {

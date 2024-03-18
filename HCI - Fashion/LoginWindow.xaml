@@ -96,6 +96,7 @@
                              x:Name="UsernameTextBox"
                              GotFocus="UsernameTextBox_GotFocus"
                              LostFocus="UsernameTextBox_LostFocus"
+                             KeyDown="TextBox_KeyDown"
                              Text="Enter username"
                              FontSize="20"
                              Foreground="Gray"/>
@@ -111,10 +112,11 @@
                              x:Name="PasswordTextBox"
                              GotFocus="PasswordTextBox_GotFocus"
                              LostFocus="PasswordTextBox_LostFocus"
-                             KeyDown="PasswordTextBox_KeyDown"
+                             KeyDown="TextBox_KeyDown"
                              Text="Enter password"
                              FontSize="20"
-                             Foreground="Gray"/>
+                             Foreground="Gray"
+                             />
                 </Border>
             </StackPanel>
             
