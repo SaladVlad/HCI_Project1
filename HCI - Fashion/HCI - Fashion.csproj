@@ -87,6 +87,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\ItemContainer.cs" />
+    <Compile Include="Classes\User.cs" />
     <Compile Include="CreateOrEditWindow.xaml.cs">
       <DependentUpon>CreateOrEditWindow.xaml</DependentUpon>
     </Compile>
@@ -126,9 +127,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="ImgSourceUI\80s_BG.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="ImgSourceUI\Backdrop.jpg" />
