@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
         xmlns:local="clr-namespace:HCI___Fashion"
+        xmlns:notifications="clr-namespace:Notification.Wpf.Controls;assembly=Notification.Wpf"
         mc:Ignorable="d"
         Title="Login" 
         SizeToContent="WidthAndHeight"
@@ -12,7 +13,20 @@
         AllowsTransparency="True"
         Background="Transparent"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
+
+
+    
+
     <Canvas Width="300" Height="400">
+
+        <notifications:NotificationArea
+            x:Name="WindowNotificationArea"
+            Panel.ZIndex="1000"
+            MaxItems="2"
+            Position="TopLeft"
+            Width="250"/>
+
+
         <Path 
     x:Name="LoginUIPath2"
     Stroke="DarkOrange"
@@ -72,7 +86,7 @@
                 </Border>
                 
                 <Label Content="Username:"
-                       HorizontalAlignment="Center"
+                       HorizontalAlignment="Left"
                        FontSize="20"/>
                 <Border BorderBrush="Transparent"
                         BorderThickness="2"
@@ -80,10 +94,14 @@
                     <TextBox Width="230"
                              Height="30"
                              x:Name="UsernameTextBox"
-                             MouseLeftButtonDown="UsernameTextBox_MouseLeftButtonDown"/>
+                             GotFocus="UsernameTextBox_GotFocus"
+                             LostFocus="UsernameTextBox_LostFocus"
+                             Text="Enter username"
+                             FontSize="20"
+                             Foreground="Gray"/>
                 </Border>
                 <Label Content="Password:"
-                       HorizontalAlignment="Center"
+                       HorizontalAlignment="Left"
                        FontSize="20"/>
                 <Border BorderBrush="Transparent"
                         BorderThickness="2"
@@ -91,7 +109,12 @@
                     <TextBox Width="230"
                              Height="30"
                              x:Name="PasswordTextBox"
-                             MouseLeftButtonDown="PasswordTextBox_MouseLeftButtonDown"/>
+                             GotFocus="PasswordTextBox_GotFocus"
+                             LostFocus="PasswordTextBox_LostFocus"
+                             KeyDown="PasswordTextBox_KeyDown"
+                             Text="Enter password"
+                             FontSize="20"
+                             Foreground="Gray"/>
                 </Border>
             </StackPanel>
             
@@ -106,8 +129,7 @@
                     FontSize="20"
                     FontWeight="Bold"
                     FontFamily="Calibri"
-                    Click="LoginButton_Click"
-                    ToolTip="Close The Program">
+                    Click="LoginButton_Click">
                     Login
                 </Button>
             </StackPanel>
@@ -121,7 +143,7 @@
                 Margin="265 10 10 10"
                 HorizontalAlignment="Right"
                 Background="White"
-                
+                ToolTip="Close The Program"
                 Click="ExitButton_Click">
             <fa5:SvgAwesome 
                 Height="15"
