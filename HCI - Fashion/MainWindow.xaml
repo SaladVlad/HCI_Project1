@@ -5,6 +5,7 @@
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HCI___Fashion"
+        xmlns:notifications="clr-namespace:Notification.Wpf.Controls;assembly=Notification.Wpf"
         mc:Ignorable="d"
         Title="80s Male Fashion Sets" 
         SizeToContent="WidthAndHeight"
@@ -12,7 +13,17 @@
         AllowsTransparency="True"
         Background="Transparent"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
+    
+    
+    
     <Canvas Width="900" Height="500">
+
+        <notifications:NotificationArea
+            x:Name="WindowNotificationArea"
+            Panel.ZIndex="1000"
+            MaxItems="3"
+            Position="TopCenter"
+            Margin="275 5 0 0"/>
 
         <Path x:Name="UIPath"
               Stroke="DarkCyan"
@@ -31,15 +42,15 @@
                             Size="250,250"
                             SweepDirection="Counterclockwise" />
                         <LineSegment Point="250,500" />
+                        
                         <!--The grooves bottom-->
                         <LineSegment Point="400,500"/>
                         <LineSegment Point="425,475"/>
-
                         <LineSegment Point="450,500"/>
-
                         <LineSegment Point="475,475"/>
                         <LineSegment Point="500,500"/>
                         <!--End of bottom grooves-->
+                        
                         <LineSegment Point="650,500" />
                         <ArcSegment
                             IsLargeArc="True"
@@ -47,12 +58,11 @@
                             RotationAngle="180"
                             Size="150,150"
                             SweepDirection="CounterClockwise" />
+                        
                         <!--The grooves part 2-->
                         <LineSegment Point="500,0"/>
                         <LineSegment Point="475,25"/>
-
                         <LineSegment Point="450,0"/>
-
                         <LineSegment Point="425,25"/>
                         <LineSegment Point="400,0"/>
                         <!--The end of grooves part 2-->
@@ -127,8 +137,9 @@
                         Visibility="Visible"
                         FontSize="20"
                         FontWeight="Bold"
-                        Cursor="Hand">
-                        Add Set
+                        Cursor="Hand"
+                        Click="AddContentButton_Click">
+                        Add Item
                     </Button>
 
                     <Label
@@ -141,7 +152,7 @@
                         Background="#fd7662"
                         BorderBrush="Black"
                         BorderThickness="3"
-                        x:Name="AdminModeLabel"
+                        x:Name="ModeLabel"
                         Content="Admin mode">
                         
                     </Label>
@@ -154,8 +165,9 @@
                         Height="50"
                         FontSize="20"
                         FontWeight="Bold"
-                        Cursor="Hand">
-                        Remove Set
+                        Cursor="Hand"
+                        Click="DeleteContentButton_Click">
+                        Remove Item(s)
                     </Button>
                 </Grid>
 
@@ -166,7 +178,50 @@
             
             <DataGrid
                 x:Name="ContentDataGrid"
-                Background="SeaShell">
+                Background="SeaShell"
+                AlternatingRowBackground="PeachPuff"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                CanUserReorderColumns="False"
+                CanUserSortColumns="False"
+                ScrollViewer.CanContentScroll="True"
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                ItemsSource="{Binding Items}"
+                AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn
+                        Header="Select"
+                        MaxWidth="45"
+                        CanUserResize="False"/>
+                        
+                    <DataGridTextColumn
+                        Header="Name"
+                        Width="150"
+                        MaxWidth="200"
+                        MinWidth="60"
+                        Binding="{Binding Name}"/>
+
+                    <DataGridTemplateColumn
+                        Header="Image"
+                        MaxWidth="200"
+                        MinWidth="150">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding ImagePath}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                   
+                    <DataGridTextColumn 
+                        Header="Creation Date"
+                        Binding="{Binding CreationDate}"
+                        Width="200"
+                        MaxWidth="200"/>
+                    
+                </DataGrid.Columns>
+                
+
 
             </DataGrid>
         </DockPanel>
