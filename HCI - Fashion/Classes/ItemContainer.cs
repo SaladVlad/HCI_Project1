@@ -21,7 +21,7 @@ namespace HCI___Fashion.Classes
         {
             this.Id = id;
             this.Name = name;
-            this.ImagePath = "\\img\\" + imagePath;
+            this.ImagePath = imagePath;
             this.TextPath = textPath;
             this.CreationDate = DateTime.Now;
         }
@@ -33,15 +33,7 @@ namespace HCI___Fashion.Classes
 
         public int Id { get => _id; set => _id = value; }
         public string Name { get => _name; set => _name = value; }
-        public string ImagePath
-        {
-            get { return _imagePath; }
-            set
-            {
-                //_imagePath = value;
-                //OnPropertyChanged(nameof(ImageSource));
-            }
-        }
+        public string ImagePath { get => _imagePath; set => _imagePath = value; }
         public string TextPath { get => _textPath; set => _textPath = value; }
         public DateTime CreationDate { get => _creationDate; set => _creationDate = value; }
 
@@ -52,9 +44,10 @@ namespace HCI___Fashion.Classes
         //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         //}
 
-        public override string ToString()
-        {
-            return "Id: "+Id+" Name: "+Name+" ImgPath: "+ImagePath+" TextPath: "+TextPath+"\n";
-        }
+
+        //public override string ToString()
+        //{
+        //    return "Id: "+Id+" Name: "+Name+" ImgPath: "+ImagePath+" TextPath: "+TextPath+"\n";
+        //}
     }
 }
