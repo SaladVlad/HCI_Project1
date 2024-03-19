@@ -104,7 +104,12 @@ namespace HCI___Fashion
                 if (result == MessageBoxResult.Yes)
                 {
                     Helpers.DataIO io = new Helpers.DataIO();
+
                     io.SerializeObject(Items, "items.xml");
+                    LoginWindow loginWindow = new LoginWindow();
+                    loginWindow.Show();
+                    this.Close();
+
                 }
                 else if (result == MessageBoxResult.No)
                 {
@@ -133,7 +138,7 @@ namespace HCI___Fashion
 
         private void AddContentButton_Click(object sender, RoutedEventArgs e)
         {
-
+            CreateOrEditWindow createOrEditWindow = new CreateOrEditWindow(false);
         }
 
         private void DeleteContentButton_Click(object sender, RoutedEventArgs e)
@@ -181,5 +186,30 @@ namespace HCI___Fashion
                 notificationManager.Show("Error", "There are no selected items for deletion!", NotificationType.Error, "WindowNotificationArea");
             }
         }
+
+
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+
+            if (e.OriginalSource is Hyperlink hyperlink)
+            {
+                ItemContainer rowData = (ItemContainer)hyperlink.DataContext;
+
+                ItemContainer item = null;
+                foreach (ItemContainer ic in Items)
+                {
+                    if (ic.Id == rowData.Id)
+                    {
+                        item = ic;
+                        break;
+                    }
+                }
+
+                CreateOrEditWindow createOrEditWindow = new CreateOrEditWindow(item,IsAdmin);
+                createOrEditWindow.ShowDialog();
+                e.Handled = true;
+            }
+        }
+
     }
 }
