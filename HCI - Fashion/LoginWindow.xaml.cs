@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 
 using HCI___Fashion.Helpers;
 using Notification.Wpf;
+using static System.Net.WebRequestMethods;
+using System.Net.NetworkInformation;
 
 namespace HCI___Fashion
 {
@@ -28,13 +30,37 @@ namespace HCI___Fashion
         NotificationManager notificationManager;
         public LoginWindow()
         {
+
+            if (!IsConnectedToInternet())
+            {
+                MessageBox.Show("You need internet to run this application! (This app uses internet resources)",
+                                "Critical error",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Stop);
+                Environment.Exit(-1);
+                
+            }
+
+
             InitializeComponent();
             DataIO io = new Helpers.DataIO();
             users = io.DeSerializeObject<List<User>>("users.xml");
             notificationManager = new NotificationManager();
-
             UsernameTextBox.Focus();
+        }
 
+        public bool IsConnectedToInternet()
+        {
+            Ping p = new Ping();
+            try
+            {
+                PingReply reply = p.Send("google.com", 1000);
+                return reply.Status == IPStatus.Success;
+            }
+            catch (PingException)
+            {
+                return false;
+            }
         }
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
@@ -44,7 +70,7 @@ namespace HCI___Fashion
                 User foundUser = null;
                 foreach(User u in users)
                 {
-                    if(u.Username.Equals(UsernameTextBox.Text) && u.Password.Equals(PasswordTextBox.Text))
+                    if(u.Username.Equals(UsernameTextBox.Text) && u.Password.Equals(PasswordBox.Password))
                     {
                         foundUser = u;
                         break;
@@ -97,9 +123,9 @@ namespace HCI___Fashion
                 RaiseToast("usernameEmpty");
                 valid = false;
             }
-            if (PasswordTextBox.Text.Equals("Enter password"))
+            if (PasswordBox.Password.Equals("Enter password"))
             {
-                PasswordTextBoxBorder.BorderBrush = Brushes.Red;
+                PasswordBoxBorder.BorderBrush = Brushes.Red;
                 RaiseToast("passwordEmpty");
                 valid = false;
             }
@@ -127,13 +153,13 @@ namespace HCI___Fashion
             }
         }
 
-        private void PasswordTextBox_GotFocus(object sender, RoutedEventArgs e)
+        private void PasswordBox_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (PasswordTextBox.Text.Equals("Enter password"))
+            if (PasswordBox.Password.Equals("Enter password"))
             {
-                PasswordTextBoxBorder.BorderBrush = Brushes.Transparent;
-                PasswordTextBox.Text = string.Empty;
-                PasswordTextBox.Foreground = Brushes.Black;
+                PasswordBoxBorder.BorderBrush = Brushes.Transparent;
+                PasswordBox.Password = string.Empty;
+                PasswordBox.Foreground = Brushes.Black;
             }
             
         }
@@ -147,12 +173,12 @@ namespace HCI___Fashion
             }
         }
 
-        private void PasswordTextBox_LostFocus(object sender, RoutedEventArgs e)
+        private void PasswordBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (PasswordTextBox.Text.Equals(string.Empty))
+            if (PasswordBox.Password.Equals(string.Empty))
             {
-                PasswordTextBox.Text = "Enter password";
-                PasswordTextBox.Foreground = Brushes.Gray;
+                PasswordBox.Password = "Enter password";
+                PasswordBox.Foreground = Brushes.Gray;
             }
         }
 

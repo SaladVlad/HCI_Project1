@@ -27,11 +27,11 @@
             Width="250"/>
 
 
-        <Path 
-    x:Name="LoginUIPath2"
-    Stroke="DarkOrange"
-    StrokeThickness="5"
-    Fill="LightSalmon">
+        <Path
+            x:Name="LoginUIPath2"
+            Stroke="DarkOrange"
+            StrokeThickness="5"
+            Fill="LightSalmon">
             <Path.Data>
                 <PathGeometry>
 
@@ -71,23 +71,30 @@
             <StackPanel DockPanel.Dock="Top"
                         HorizontalAlignment="Center"
                         Orientation="Vertical"
-                        Margin="10 80 10 0">
-                <Border BorderBrush="Orange"
-                        BorderThickness="0"
+                        Margin="10 40 10 0">
+                <fa5:SvgAwesome Icon="Solid_Tshirt" Width="40"/>
+                <Border BorderBrush="DarkCyan"
+                        BorderThickness="4"
                         Background="PeachPuff"
-                        Margin="0 0 0 20">
+                        Margin="0 20 0 10">
                     <Label x:Name="IntoLabel"
-                           FontSize="18"
+                           FontSize="24"
+                           FontFamily="Arial"
                            FontWeight="Bold"
                            HorizontalAlignment="Center"
-                           Content="Login Page">
+                           Content="Welcome back...">
                         
                     </Label>
                 </Border>
+
+                <StackPanel Orientation="Horizontal"
+                            Margin="5 0 0 0">
+                    <fa5:SvgAwesome MaxWidth="20" Icon="Solid_User"/>
+                    <Label Content=" Username:"
+                        HorizontalAlignment="Left"
+                        FontSize="20"/>
+                </StackPanel>
                 
-                <Label Content="Username:"
-                       HorizontalAlignment="Left"
-                       FontSize="20"/>
                 <Border BorderBrush="Transparent"
                         BorderThickness="2"
                         x:Name="UsernameTextBoxBorder">
@@ -101,22 +108,29 @@
                              FontSize="20"
                              Foreground="Gray"/>
                 </Border>
-                <Label Content="Password:"
-                       HorizontalAlignment="Left"
-                       FontSize="20"/>
+                    
+                <StackPanel Orientation="Horizontal"
+                            Margin="5 0 0 0">
+                    <fa5:SvgAwesome MaxWidth="20" Icon="Solid_Key"/>
+                    <Label Content=" Username:"
+                        HorizontalAlignment="Left"
+                        FontSize="20"/>
+                </StackPanel>
+
                 <Border BorderBrush="Transparent"
                         BorderThickness="2"
-                        x:Name="PasswordTextBoxBorder">
-                    <TextBox Width="230"
+                        x:Name="PasswordBoxBorder">
+                    <PasswordBox Width="230"
                              Height="30"
-                             x:Name="PasswordTextBox"
-                             GotFocus="PasswordTextBox_GotFocus"
-                             LostFocus="PasswordTextBox_LostFocus"
+                             x:Name="PasswordBox"
+                             GotFocus="PasswordBox_GotFocus"
+                             LostFocus="PasswordBox_LostFocus"
                              KeyDown="TextBox_KeyDown"
-                             Text="Enter password"
+                             Visibility="Visible"
+                             
+                             Password="Enter password"
                              FontSize="20"
-                             Foreground="Gray"
-                             />
+                             Foreground="Gray"/>
                 </Border>
             </StackPanel>
             
