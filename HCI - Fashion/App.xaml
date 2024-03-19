@@ -15,8 +15,8 @@
                         <Border
                             x:Name="ButtonBorder"
                             Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="DarkCyan"
+                            BorderThickness="3"
                             Padding="{TemplateBinding Padding}"
                             CornerRadius="5">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
