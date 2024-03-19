@@ -6,6 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.Xml;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows;
 
 namespace HCI___Fashion.Helpers
 {
@@ -68,6 +71,43 @@ namespace HCI___Fashion.Helpers
             }
 
             return objectOut;
+        }
+
+
+        public void SaveAsRtfFile(string filePath,RichTextBox richTextBox)
+        {
+            try
+            {
+                TextRange textRange = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
+
+                using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    textRange.Save(fileStream, DataFormats.Rtf);
+                }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            
+        }
+
+        public void LoadRtfFile(string filePath, RichTextBox richTextBox)
+        {
+            try
+            {
+                TextRange textRange = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
+
+                using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
+                {
+                    textRange.Load(fileStream, DataFormats.Rtf);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            
         }
     }
 }
