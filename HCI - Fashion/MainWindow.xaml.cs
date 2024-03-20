@@ -138,7 +138,17 @@ namespace HCI___Fashion
 
         private void AddContentButton_Click(object sender, RoutedEventArgs e)
         {
-            CreateOrEditWindow createOrEditWindow = new CreateOrEditWindow(false);
+            
+            ItemContainer newItem = new ItemContainer();
+            CreateOrEditWindow createOrEditWindow = new CreateOrEditWindow(newItem,true);
+            createOrEditWindow.ShowDialog();
+
+            if (newItem.Name != null)
+            {
+                Items.Add(newItem);
+                RaiseToast("creationSuccessful");
+            }
+                
         }
 
         private void DeleteContentButton_Click(object sender, RoutedEventArgs e)
@@ -179,15 +189,6 @@ namespace HCI___Fashion
             }
         }
 
-        private void RaiseToast(string semantic)
-        {
-            if (semantic.Equals("noSelectedItems"))
-            {
-                notificationManager.Show("Error", "There are no selected items for deletion!", NotificationType.Error, "WindowNotificationArea");
-            }
-        }
-
-
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
 
@@ -205,9 +206,30 @@ namespace HCI___Fashion
                     }
                 }
 
-                CreateOrEditWindow createOrEditWindow = new CreateOrEditWindow(item,IsAdmin);
+                CreateOrEditWindow createOrEditWindow = new CreateOrEditWindow(item, IsAdmin);
                 createOrEditWindow.ShowDialog();
                 e.Handled = true;
+
+                ContentDataGrid.ItemsSource = null;
+                ContentDataGrid.ItemsSource = Items;
+                RaiseToast("editSuccessful");
+
+            }
+        }
+
+        private void RaiseToast(string semantic)
+        {
+            if (semantic.Equals("noSelectedItems"))
+            {
+                notificationManager.Show("Error", "There are no selected items for deletion!", NotificationType.Error, "WindowNotificationArea");
+            }
+            if (semantic.Equals("creationSuccessful"))
+            {
+                notificationManager.Show("Creation successful", "Item has been added to the list!", NotificationType.Success, "WindowNotificationArea");
+            }
+            if (semantic.Equals("editSuccessful"))
+            {
+                notificationManager.Show("Edit successful", "Item has been edited sucessfully!", NotificationType.Success, "WindowNotificationArea");
             }
         }
 
