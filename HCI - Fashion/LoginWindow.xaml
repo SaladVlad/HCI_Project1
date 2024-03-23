@@ -78,11 +78,11 @@
                         Background="PeachPuff"
                         Margin="0 20 0 10">
                     <Label x:Name="IntoLabel"
-                           FontSize="24"
-                           FontFamily="Arial"
+                           FontSize="22"
+                           FontFamily="Verdana"
                            FontWeight="Bold"
                            HorizontalAlignment="Center"
-                           Content="Welcome back...">
+                           Content="80s Male Fashion">
                         
                     </Label>
                 </Border>
