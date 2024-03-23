@@ -9,7 +9,7 @@ using System.Windows.Media;
 namespace HCI___Fashion.Classes
 {
     [Serializable]
-    public class ItemContainer /*: INotifyPropertyChanged*/
+    public class ItemContainer: ICloneable
     {
         int _id;
         string _name;
@@ -37,17 +37,14 @@ namespace HCI___Fashion.Classes
         public string TextPath { get => _textPath; set => _textPath = value; }
         public DateTime CreationDate { get => _creationDate; set => _creationDate = value; }
 
-        //public event PropertyChangedEventHandler PropertyChanged;
+        public ItemContainer Clone()
+        {
+            return new ItemContainer(Id, Name, ImagePath, TextPath);
+        }
 
-        //protected virtual void OnPropertyChanged(string propertyName)
-        //{
-        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        //}
-
-
-        //public override string ToString()
-        //{
-        //    return "Id: "+Id+" Name: "+Name+" ImgPath: "+ImagePath+" TextPath: "+TextPath+"\n";
-        //}
+        object ICloneable.Clone()
+        {
+            return null;
+        }
     }
 }
