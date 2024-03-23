@@ -2,22 +2,17 @@
 using Notification.Wpf;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Security.Policy;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Xml.Linq;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 
@@ -28,8 +23,6 @@ namespace HCI___Fashion
     /// </summary>
     public partial class CreateOrEditWindow : Window
     {
-        
-        public bool IsAdmin { get; set; }
 
         private Helpers.DataIO io;
 
@@ -39,22 +32,34 @@ namespace HCI___Fashion
 
         private ItemContainer item;
 
+        private List<int> IDs;
 
-        public CreateOrEditWindow(ItemContainer itemContainer,bool isAdmin)
+        private int previousID;
+
+
+        public CreateOrEditWindow(ItemContainer itemContainer,ObservableCollection<ItemContainer> items)
         {
             InitializeComponent();
             DataContext = this;
 
-            IsAdmin = isAdmin;
             notificationManager = new NotificationManager(Application.Current.Dispatcher);
             io = new Helpers.DataIO();
 
             InitUI();
-            if(itemContainer!=null)
+            if (itemContainer != null)
                 FillWithData(itemContainer);
 
             //passing the reference of the modified item
             item = itemContainer;
+
+            previousID = item.Id;
+
+            IDs = new List<int>();
+            foreach(ItemContainer ic in items)
+            {
+                IDs.Add(ic.Id);
+            }
+
 
         }
 
@@ -72,49 +77,29 @@ namespace HCI___Fashion
                 ImageFrame.Source = new BitmapImage(new Uri("ImgSourceUI/template.jpg", UriKind.RelativeOrAbsolute));
             }
             io.LoadRtfFile(itemContainer.TextPath, EditorRichTextBox);
-            
+
         }
 
         private void InitUI()
         {
-            if (!IsAdmin)
+
+
+            FontFamilyComboBox.ItemsSource = Fonts.SystemFontFamilies.OrderBy(f => f.Source);
+            FontFamilyComboBox.SelectedIndex = 0;
+
+            foreach (KnownColor inbuiltColor in Enum.GetValues(typeof(KnownColor)))
             {
-                IDTextBox.IsEnabled = false;
-                NameTextBox.IsEnabled = false;
+                System.Drawing.Color loadColor = System.Drawing.Color.FromKnownColor(inbuiltColor);
 
-                ImageURLTextBox.Visibility = Visibility.Hidden;
-                ImageURLTextBox.IsEnabled = false;
-
-                EditorToolBar.Visibility = Visibility.Hidden;
-                EditorToolBar.IsEnabled = false;
-                
-                SaveButton.Visibility= Visibility.Hidden;
-                SaveButton.IsEnabled = false;
-
-                WordCountPanel.Visibility = Visibility.Hidden;
-
-                CancelButton.Content = "Exit";
-            }
-            else
-            {
-
-                FontFamilyComboBox.ItemsSource = Fonts.SystemFontFamilies.OrderBy(f => f.Source);
-                FontFamilyComboBox.SelectedIndex = 0;
-
-                foreach(KnownColor inbuiltColor in Enum.GetValues(typeof(KnownColor)))
+                if (loadColor.IsSystemColor == false)
                 {
-                    System.Drawing.Color loadColor = System.Drawing.Color.FromKnownColor(inbuiltColor);
-
-                    if(loadColor.IsSystemColor == false)
-                    {
-                        if (loadColor.Name != "Transparent")
-                            colorList.Add(loadColor);
-                    }
-
+                    if (loadColor.Name != "Transparent")
+                        colorList.Add(loadColor);
                 }
-                ColorComboBox.ItemsSource = colorList;
 
             }
+            ColorComboBox.ItemsSource = colorList;
+
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -122,7 +107,7 @@ namespace HCI___Fashion
             this.DragMove();
         }
 
-        
+
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
 
@@ -131,42 +116,63 @@ namespace HCI___Fashion
             {
                 if (!IDTextBox.Text.Equals(string.Empty))
                 {
-                    int _ = int.Parse(IDTextBox.Text);
+                    int i = int.Parse(IDTextBox.Text);
+                    if (IDs.Contains(i) && previousID != i)
+                    {
+                        RaiseToast("existsID");
+                        allGood = false;
+                    }
+
                 }
-                else
+                else 
                 {
                     RaiseToast("emptyID");
+                    allGood = false;
                 }
 
             }
             catch
             {
                 RaiseToast("badID");
+                allGood = false;
             }
 
             if (NameTextBox.Text.Equals(""))
             {
                 RaiseToast("emptyName");
+                allGood = false;
             }
 
-            if(ImageURLTextBox.Equals("") && 
+            
+            if (ImageURLTextBox.Equals("Paste new URL...") &&
                 ImageFrame.Source == new BitmapImage(
                     new Uri("ImgSourceUI/template.jpg", UriKind.RelativeOrAbsolute)))
             {
                 RaiseToast("imageMissing");
+                allGood = false;
             }
 
             if (allGood)
             {
+                //item didn't exist before, so mark it's creation time
+                if(item.Name == null)
+                {
+                    item.CreationDate = DateTime.Now;
+                }
 
                 item.Id = int.Parse(IDTextBox.Text);
                 item.Name = NameTextBox.Text;
-
                 item.ImagePath = ImageFrame.Source.ToString();
 
-                item.TextPath = "item" + IDTextBox.Text + ".rtf";
+                
+                //rename the .rtf file if ID changed                
+                if (previousID != item.Id && File.Exists(item.TextPath))
+                {
+                    System.IO.File.Move(item.TextPath, "item" + IDTextBox.Text + ".rtf");
+                }
 
-                item.CreationDate = DateTime.Now;
+                item.TextPath = "item" + IDTextBox.Text + ".rtf";
+                
 
                 io.SaveAsRtfFile(item.TextPath, EditorRichTextBox);
 
@@ -196,7 +202,7 @@ namespace HCI___Fashion
 
         private void ImageURLTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
-            if(ImageURLTextBox.Text.Equals("Paste new URL..."))
+            if (ImageURLTextBox.Text.Equals("Paste new URL..."))
             {
                 ImageURLTextBox.Text = "";
                 ImageURLTextBox.Foreground = Brushes.Black;
@@ -214,7 +220,7 @@ namespace HCI___Fashion
             {
                 try
                 {
-                    ImageFrame.Source = new BitmapImage(new Uri(ImageURLTextBox.Text,UriKind.Absolute));
+                    ImageFrame.Source = new BitmapImage(new Uri(ImageURLTextBox.Text, UriKind.Absolute));
                 }
                 catch
                 {
@@ -227,7 +233,7 @@ namespace HCI___Fashion
         {
             /* Some very weird casting and substring magic :) */
             string s = ColorComboBox.SelectedItem.ToString();
-            string brushName = s.Substring(s.IndexOf('[')+1,s.IndexOf(']')-s.IndexOf('[')-1);
+            string brushName = s.Substring(s.IndexOf('[') + 1, s.IndexOf(']') - s.IndexOf('[') - 1);
             Brush brush = (Brush)new BrushConverter().ConvertFromString(brushName);
             ColorRectangle.Fill = brush;
 
@@ -244,11 +250,11 @@ namespace HCI___Fashion
 
         private void ImageURLTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.Enter)
+            if (e.Key == Key.Enter)
             {
                 try
                 {
-                    ImageFrame.Source = new BitmapImage(new Uri(ImageURLTextBox.Text,UriKind.Absolute));
+                    ImageFrame.Source = new BitmapImage(new Uri(ImageURLTextBox.Text, UriKind.Absolute));
                 }
                 catch
                 {
@@ -261,7 +267,7 @@ namespace HCI___Fashion
         {
             if (semantic.Equals("wrongURL"))
             {
-                notificationManager.Show("URL is not valid!",NotificationType.Error, "CreateOrUpdateWindowNotificationArea");
+                notificationManager.Show("URL is not valid!", NotificationType.Error, "CreateOrUpdateWindowNotificationArea");
             }
             if (semantic.Equals("emptyID"))
             {
@@ -271,9 +277,18 @@ namespace HCI___Fashion
             {
                 notificationManager.Show("ID is NOT a number!", NotificationType.Error, "CreateOrUpdateWindowNotificationArea");
             }
+            if (semantic.Equals("existsID"))
+            {
+                notificationManager.Show("ID already exists!", NotificationType.Error, "CreateOrUpdateWindowNotificationArea");
+            }
             if (semantic.Equals("emptyName"))
             {
                 notificationManager.Show("Name can't be Empty!", NotificationType.Error, "CreateOrUpdateWindowNotificationArea");
+            }
+            if (semantic.Equals("imageMissing"))
+            {
+                notificationManager.Show("Image can't be empty! Please choose a new Image.", NotificationType.Error, "CreateOrUpdateWindowNotificationArea");
+
             }
         }
 
@@ -354,7 +369,7 @@ namespace HCI___Fashion
 
         private void ChangeFontSize(double size)
         {
-           
+
             TextRange selectionRange = new TextRange(EditorRichTextBox.Selection.Start, EditorRichTextBox.Selection.End);
 
             if (selectionRange != null)
@@ -365,7 +380,6 @@ namespace HCI___Fashion
 
         private void FontSizeTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            Console.WriteLine("pressed key: " + e.Key);
             if (e.Key == Key.Enter)
             {
 
