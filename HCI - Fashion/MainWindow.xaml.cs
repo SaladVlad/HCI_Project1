@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace HCI___Fashion
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window  //, INotifyPropertyChanged
+    public partial class MainWindow : Window
     {
         public bool IsAdmin { get; }
 
@@ -32,7 +33,7 @@ namespace HCI___Fashion
         ObservableCollection<ItemContainer> _items;
         private NotificationManager notificationManager;
 
-        //public event PropertyChangedEventHandler PropertyChanged;
+        Helpers.DataIO io = new Helpers.DataIO();
 
         public ObservableCollection<ItemContainer> Items
         {
@@ -93,62 +94,36 @@ namespace HCI___Fashion
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
-            if (IsAdmin)
+
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to exit?",
+                                                "Confirmation",
+                                                MessageBoxButton.YesNo,
+                                                MessageBoxImage.Information);
+
+            if (result == MessageBoxResult.Yes)
             {
-                MessageBoxResult result = MessageBox.Show(
-                               "Save changes before exiting?",
-                               "Confirmation",
-                               MessageBoxButton.YesNoCancel,
-                               MessageBoxImage.Warning);
-
-                if (result == MessageBoxResult.Yes)
-                {
-                    Helpers.DataIO io = new Helpers.DataIO();
-
-                    io.SerializeObject(Items, "items.xml");
-                    LoginWindow loginWindow = new LoginWindow();
-                    loginWindow.Show();
-                    this.Close();
-
-                }
-                else if (result == MessageBoxResult.No)
-                {
-                    //Dont save anything and exit the program
-                    LoginWindow loginWindow = new LoginWindow();
-                    loginWindow.Show();
-                    this.Close();
-                }
-
+                LoginWindow loginWindow = new LoginWindow();
+                loginWindow.Show();
+                this.Close();
             }
-            else
-            {
-                MessageBoxResult result = MessageBox.Show("Are you sure you want to exit?",
-                                                    "Confirmation",
-                                                    MessageBoxButton.YesNo,
-                                                    MessageBoxImage.Information);
-                if (result == MessageBoxResult.Yes)
-                {
-                    LoginWindow loginWindow = new LoginWindow();
-                    loginWindow.Show();
-                    this.Close();
-                }
-            }
+
 
         }
 
         private void AddContentButton_Click(object sender, RoutedEventArgs e)
         {
-            
+
             ItemContainer newItem = new ItemContainer();
-            CreateOrEditWindow createOrEditWindow = new CreateOrEditWindow(newItem,true);
+            CreateOrEditWindow createOrEditWindow = new CreateOrEditWindow(newItem, Items);
             createOrEditWindow.ShowDialog();
 
             if (newItem.Name != null)
             {
                 Items.Add(newItem);
                 RaiseToast("creationSuccessful");
+                io.SerializeObject(Items, "items.xml");
             }
-                
+
         }
 
         private void DeleteContentButton_Click(object sender, RoutedEventArgs e)
@@ -186,6 +161,9 @@ namespace HCI___Fashion
                 {
                     Items.Remove(ic);
                 }
+                //clear leftover rtf files and save
+                CleanRTFFiles();
+                io.SerializeObject(Items, "items.xml");
             }
         }
 
@@ -206,13 +184,34 @@ namespace HCI___Fashion
                     }
                 }
 
-                CreateOrEditWindow createOrEditWindow = new CreateOrEditWindow(item, IsAdmin);
-                createOrEditWindow.ShowDialog();
-                e.Handled = true;
+                if (IsAdmin)
+                {
+                    ItemContainer oldItem = item.Clone();
 
-                ContentDataGrid.ItemsSource = null;
-                ContentDataGrid.ItemsSource = Items;
-                RaiseToast("editSuccessful");
+                    CreateOrEditWindow createOrEditWindow = new CreateOrEditWindow(item, Items);
+                    createOrEditWindow.ShowDialog();
+                    e.Handled = true;
+
+                    if (item.Id == oldItem.Id &&
+                        item.Name == oldItem.Name &&
+                        item.ImagePath == oldItem.ImagePath &&
+                        item.TextPath == oldItem.TextPath)
+                    {
+                        //nothing changed
+                    }
+                    else
+                    {
+                        ContentDataGrid.Items.Refresh();
+                        RaiseToast("editSuccessful");
+
+                    }
+                }
+                else
+                {
+                    ViewWindow viewWindow = new ViewWindow(item);
+                    viewWindow.ShowDialog();
+                    e.Handled = true;
+                }
 
             }
         }
@@ -230,6 +229,34 @@ namespace HCI___Fashion
             if (semantic.Equals("editSuccessful"))
             {
                 notificationManager.Show("Edit successful", "Item has been edited sucessfully!", NotificationType.Success, "WindowNotificationArea");
+            }
+        }
+
+
+        private void CleanRTFFiles()
+        {
+            string rootDirectory = AppDomain.CurrentDomain.BaseDirectory;
+
+            // Collect file names for each item
+            HashSet<string> validFileNames = new HashSet<string>();
+            foreach (ItemContainer item in Items)
+            {
+                string id = item.Id.ToString();
+                string fileName = "item" + id + ".rtf";
+                validFileNames.Add(fileName);
+            }
+
+            // Get all .rtf files in the root directory
+            string[] files = Directory.GetFiles(rootDirectory, "*.rtf", SearchOption.TopDirectoryOnly);
+
+            // Delete files that are not in the set of relevent file names
+            foreach (string filePath in files)
+            {
+                string fileName = System.IO.Path.GetFileName(filePath);
+                if (!validFileNames.Contains(fileName))
+                {
+                    File.Delete(filePath);
+                }
             }
         }
 
