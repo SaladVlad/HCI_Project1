@@ -230,12 +230,26 @@
                 CanUserDeleteRows="False"
                 CanUserReorderColumns="False"
                 CanUserSortColumns="False"
+                IsReadOnly="False"
                 ScrollViewer.CanContentScroll="True"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
                 ItemsSource="{Binding Items}"
                 AutoGenerateColumns="False"
                 VirtualizingPanel.ScrollUnit="Pixel">
+
+                <DataGrid.CellStyle>
+                    <Style TargetType="{x:Type DataGridCell}">
+                        <Style.Triggers>
+                            <Trigger Property="DataGridCell.IsSelected" Value="True">
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
+
                 <DataGrid.Columns>
                     <DataGridCheckBoxColumn
                         Header="Select"
@@ -251,6 +265,8 @@
                         Binding="{Binding Name}">
                         <DataGridHyperlinkColumn.ElementStyle>
                             <Style TargetType="TextBlock">
+                                <Setter Property="TextWrapping" Value="WrapWithOverflow"/>
+                                <Setter Property="FontSize" Value="20"/>
                                 <EventSetter Event="Hyperlink.RequestNavigate" Handler="Hyperlink_RequestNavigate"/>
                             </Style>
                         </DataGridHyperlinkColumn.ElementStyle>
