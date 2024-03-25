@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
+using Color = System.Windows.Media.Color;
 
 namespace HCI___Fashion
 {
@@ -37,7 +38,7 @@ namespace HCI___Fashion
         private int previousID;
 
 
-        public CreateOrEditWindow(ItemContainer itemContainer,ObservableCollection<ItemContainer> items)
+        public CreateOrEditWindow(ItemContainer itemContainer, ObservableCollection<ItemContainer> items)
         {
             InitializeComponent();
             DataContext = this;
@@ -55,7 +56,7 @@ namespace HCI___Fashion
             previousID = item.Id;
 
             IDs = new List<int>();
-            foreach(ItemContainer ic in items)
+            foreach (ItemContainer ic in items)
             {
                 IDs.Add(ic.Id);
             }
@@ -87,18 +88,20 @@ namespace HCI___Fashion
             FontFamilyComboBox.ItemsSource = Fonts.SystemFontFamilies.OrderBy(f => f.Source);
             FontFamilyComboBox.SelectedIndex = 0;
 
-            foreach (KnownColor inbuiltColor in Enum.GetValues(typeof(KnownColor)))
-            {
-                System.Drawing.Color loadColor = System.Drawing.Color.FromKnownColor(inbuiltColor);
+            //foreach (KnownColor inbuiltColor in Enum.GetValues(typeof(KnownColor)))
+            //{
+            //    System.Drawing.Color loadColor = System.Drawing.Color.FromKnownColor(inbuiltColor);
 
-                if (loadColor.IsSystemColor == false)
-                {
-                    if (loadColor.Name != "Transparent")
-                        colorList.Add(loadColor);
-                }
+            //    if (loadColor.IsSystemColor == false)
+            //    {
+            //        if (loadColor.Name != "Transparent")
+            //            colorList.Add(loadColor);
+            //    }
 
-            }
-            ColorComboBox.ItemsSource = colorList;
+            //}
+            //ColorComboBox.ItemsSource = colorList;
+
+            ColorPicker.SelectedColor = Brushes.Black.Color;
 
         }
 
@@ -112,42 +115,42 @@ namespace HCI___Fashion
         {
 
             bool allGood = true;
-            try
-            {
-                if (!IDTextBox.Text.Equals(string.Empty))
-                {
-                    int i = int.Parse(IDTextBox.Text);
-                    if (IDs.Contains(i) && previousID != i)
-                    {
-                        RaiseToast("existsID");
-                        allGood = false;
-                    }
 
-                }
-                else 
+            if (!IDTextBox.Text.Equals(string.Empty))
+            {
+                int i = int.Parse(IDTextBox.Text);
+                if (IDs.Contains(i) && previousID != i)
                 {
-                    RaiseToast("emptyID");
+
+                    IDTextBox.BorderBrush = Brushes.Red;
+
+                    RaiseToast("existsID");
                     allGood = false;
                 }
 
             }
-            catch
+            else
             {
-                RaiseToast("badID");
+                IDTextBox.BorderBrush = Brushes.Red;
+                RaiseToast("emptyID");
                 allGood = false;
             }
 
+
+
             if (NameTextBox.Text.Equals(""))
             {
+                NameTextBox.BorderBrush = Brushes.Red;
                 RaiseToast("emptyName");
                 allGood = false;
             }
 
-            
+
             if (ImageURLTextBox.Equals("Paste new URL...") &&
                 ImageFrame.Source == new BitmapImage(
                     new Uri("ImgSourceUI/template.jpg", UriKind.RelativeOrAbsolute)))
             {
+                ImageURLTextBox.BorderBrush = Brushes.Red;
                 RaiseToast("imageMissing");
                 allGood = false;
             }
@@ -155,7 +158,7 @@ namespace HCI___Fashion
             if (allGood)
             {
                 //item didn't exist before, so mark it's creation time
-                if(item.Name == null)
+                if (item.Name == null)
                 {
                     item.CreationDate = DateTime.Now;
                 }
@@ -164,7 +167,7 @@ namespace HCI___Fashion
                 item.Name = NameTextBox.Text;
                 item.ImagePath = ImageFrame.Source.ToString();
 
-                
+
                 //rename the .rtf file if ID changed                
                 if (previousID != item.Id && File.Exists(item.TextPath))
                 {
@@ -172,7 +175,7 @@ namespace HCI___Fashion
                 }
 
                 item.TextPath = "item" + IDTextBox.Text + ".rtf";
-                
+
 
                 io.SaveAsRtfFile(item.TextPath, EditorRichTextBox);
 
@@ -231,20 +234,11 @@ namespace HCI___Fashion
 
         private void ColorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            /* Some very weird casting and substring magic :) */
-            string s = ColorComboBox.SelectedItem.ToString();
-            string brushName = s.Substring(s.IndexOf('[') + 1, s.IndexOf(']') - s.IndexOf('[') - 1);
-            Brush brush = (Brush)new BrushConverter().ConvertFromString(brushName);
-            ColorRectangle.Fill = brush;
-
-            TextRange selectionRange = new TextRange(EditorRichTextBox.Selection.Start, EditorRichTextBox.Selection.End);
-
-            if (selectionRange != null)
-            {
-                selectionRange.ApplyPropertyValue(TextElement.ForegroundProperty, brush);
-            }
-
-
+            ///* Some very weird casting and substring magic :) */
+            //string s = ColorComboBox.SelectedItem.ToString();
+            //string brushName = s.Substring(s.IndexOf('[') + 1, s.IndexOf(']') - s.IndexOf('[') - 1);
+            //Brush brush = (Brush)new BrushConverter().ConvertFromString(brushName);
+            //ColorRectangle.Fill = brush;
 
         }
 
@@ -272,10 +266,6 @@ namespace HCI___Fashion
             if (semantic.Equals("emptyID"))
             {
                 notificationManager.Show("ID can't be Empty!", NotificationType.Error, "CreateOrUpdateWindowNotificationArea");
-            }
-            if (semantic.Equals("badID"))
-            {
-                notificationManager.Show("ID is NOT a number!", NotificationType.Error, "CreateOrUpdateWindowNotificationArea");
             }
             if (semantic.Equals("existsID"))
             {
@@ -327,20 +317,21 @@ namespace HCI___Fashion
 
             object fontColor = EditorRichTextBox.Selection.GetPropertyValue(Inline.ForegroundProperty);
 
-            if (fontColor is SolidColorBrush solidColorBrush)
+            if (fontColor is Brush brush)
             {
-                System.Windows.Media.Color color = solidColorBrush.Color;
-                string colorName = GetColorName(color);
-                ColorComboBox.SelectedItem = colorName;
+                if (brush is SolidColorBrush solidColorBrush)
+                {
+                    ColorTextBox.Text = GetNameForColor(solidColorBrush.Color);
+                }
             }
 
-
         }
-        private string GetColorName(System.Windows.Media.Color color)
+
+        public static string GetNameForColor(Color color)
         {
-            foreach (var property in typeof(System.Windows.Media.Colors).GetProperties())
+            foreach (var property in typeof(Colors).GetProperties())
             {
-                if ((System.Windows.Media.Color)property.GetValue(null) == color)
+                if ((Color)property.GetValue(null) == color)
                 {
                     return property.Name;
                 }
@@ -353,6 +344,7 @@ namespace HCI___Fashion
             //if text size is varying, don't change it because it will mess up the text
             if (FontSizeTextBox.Text.Contains("{D"))
             {
+                FontSizeTextBox.Text = "";
                 return;
             }
             try
@@ -395,6 +387,47 @@ namespace HCI___Fashion
                     ChangeFontSize(12.0);
                     FontSizeTextBox.Text = "12";
                 }
+            }
+        }
+
+        private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e)
+        {
+            ColorTextBox.Text = ColorPicker.SelectedColorText;
+            SolidColorBrush brush = new SolidColorBrush((System.Windows.Media.Color)ColorPicker.SelectedColor);
+
+            TextRange selectionRange = new TextRange(EditorRichTextBox.Selection.Start, EditorRichTextBox.Selection.End);
+
+            if (selectionRange != null)
+            {
+                selectionRange.ApplyPropertyValue(TextElement.ForegroundProperty, brush);
+            }
+
+        }
+
+        private void IDTextBox_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            IDTextBox.BorderBrush = Brushes.DarkCyan;
+            IDTextBox.BorderThickness = new Thickness(3);
+        }
+
+        private void NameTextBox_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            NameTextBox.BorderBrush = Brushes.DarkCyan;
+            NameTextBox.BorderThickness = new Thickness(3);
+        }
+
+        private void ImageURLTextBox_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ImageURLTextBox.BorderBrush = Brushes.DarkCyan;
+            ImageURLTextBox.BorderThickness = new Thickness(3);
+        }
+
+        private void IDTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (!char.IsDigit(e.Text, e.Text.Length - 1))
+            {
+                // If it's not a digit, mark the event as handled
+                e.Handled = true;
             }
         }
     }
