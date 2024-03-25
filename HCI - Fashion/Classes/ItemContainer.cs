@@ -9,7 +9,7 @@ using System.Windows.Media;
 namespace HCI___Fashion.Classes
 {
     [Serializable]
-    public class ItemContainer: ICloneable
+    public class ItemContainer
     {
         int _id;
         string _name;
@@ -42,9 +42,5 @@ namespace HCI___Fashion.Classes
             return new ItemContainer(Id, Name, ImagePath, TextPath);
         }
 
-        object ICloneable.Clone()
-        {
-            return null;
-        }
     }
 }
