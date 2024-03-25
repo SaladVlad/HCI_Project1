@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:HCI___Fashion"
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
         xmlns:notifications="clr-namespace:Notification.Wpf.Controls;assembly=Notification.Wpf"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         d:DataContext=""
         Title="Item Creation" 
@@ -89,9 +90,12 @@
                 Margin="5"
                 HorizontalAlignment="Left"
                 VerticalContentAlignment="Center"
+                MouseLeftButtonDown="IDTextBox_MouseLeftButtonDown"
+                PreviewTextInput="IDTextBox_PreviewTextInput"
                 FontSize="15"
                 BorderBrush="DarkCyan"
-                BorderThickness="3"/>
+                BorderThickness="3"
+                />
             <Label
                 Grid.Column="2"
                 Content="Name:"
@@ -108,7 +112,8 @@
                 VerticalContentAlignment="Center"
                 FontSize="15"
                 BorderBrush="DarkCyan"
-                BorderThickness="3"/>
+                BorderThickness="3"
+                MouseLeftButtonDown="NameTextBox_MouseLeftButtonDown"/>
 
 
         </Grid>
@@ -205,15 +210,25 @@
                         IsTextSearchCaseSensitive="False"
                         IsTextSearchEnabled="True"
                         SelectionChanged="FontFamilyComboBox_SelectionChanged"
-                        ToolTip="Choose font"/>
+                        ToolTip="Choose font"
+                        BorderBrush="Black"
+                        BorderThickness="1"/>
 
                     <Separator/>
-
+                    <fa5:SvgAwesome
+                        Icon="Solid_Font"
+                        Width="15"
+                        Height="15"
+                        ToolTip="Enter font size"/>
                     <TextBox
                         x:Name="FontSizeTextBox"
-                        Width="40"
-                        Text="10 pt"
-                        ToolTip="Choose font size"
+                        Width="30"
+                        Height="20"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        Text="12"
+                        HorizontalContentAlignment="Right"
+                        ToolTip="Enter font size"
                         LostFocus="FontSizeTextBox_LostFocus"
                         PreviewKeyDown="FontSizeTextBox_PreviewKeyDown"
                         >
@@ -221,11 +236,11 @@
 
                     <Separator/>
 
-                    <WrapPanel>
+                    <!--<WrapPanel>
                         <Rectangle
                             x:Name="ColorRectangle"
-                            Width="15"
-                            Height="15"
+                            Width="23"
+                            Height="23"
                             Fill="Black"/>
                         <ComboBox
                             x:Name="ColorComboBox"
@@ -236,8 +251,23 @@
                             IsTextSearchCaseSensitive="False">
 
                         </ComboBox>
-                    </WrapPanel>
+                    </WrapPanel>-->
+
                     
+
+                    <xctk:ColorPicker
+                        x:Name="ColorPicker"
+                        Width="40"
+                        MaxWidth="40"
+                        SelectedColorChanged="ColorPicker_SelectedColorChanged"/>
+
+                    <TextBox 
+                        x:Name="ColorTextBox"
+                        Width="90"
+                        IsManipulationEnabled="False"
+                        BorderBrush="Black"
+                        BorderThickness="1"/>
+
                 </ToolBar>
                 <RichTextBox 
                     x:Name="EditorRichTextBox"
@@ -281,6 +311,7 @@
                     GotFocus="ImageURLTextBox_GotFocus"
                     LostFocus="ImageURLTextBox_LostFocus"
                     KeyDown="ImageURLTextBox_KeyDown"
+                    MouseLeftButtonDown="ImageURLTextBox_MouseLeftButtonDown"
                     BorderBrush="DarkCyan"
                     BorderThickness="3"/>
             </StackPanel>
