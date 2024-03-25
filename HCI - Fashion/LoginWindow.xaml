@@ -112,7 +112,7 @@
                 <StackPanel Orientation="Horizontal"
                             Margin="5 0 0 0">
                     <fa5:SvgAwesome MaxWidth="20" Icon="Solid_Key"/>
-                    <Label Content=" Username:"
+                    <Label Content=" Password:"
                         HorizontalAlignment="Left"
                         FontSize="20"/>
                 </StackPanel>
