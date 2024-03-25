@@ -66,7 +66,9 @@ namespace HCI___Fashion
                 AddContentButton.IsEnabled = false;
                 DeleteContentButton.Visibility = Visibility.Hidden;
                 DeleteContentButton.IsEnabled = false;
-                ModeLabel.Content = "Viewer mode";
+                DataGridColumn checkBoxColumn = ContentDataGrid.Columns[0];
+                checkBoxColumn.Visibility = Visibility.Collapsed;
+                ModeLabel.Visibility = Visibility.Hidden;
             }
 
             #endregion
