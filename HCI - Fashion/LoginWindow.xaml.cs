@@ -119,7 +119,7 @@ namespace HCI___Fashion
             }
             if (semantic.Equals("accountNonExistent"))
             {
-                notificationManager.Show("Error", "Username not found!", NotificationType.Error, "WindowNotificationArea");
+                notificationManager.Show("Error", "User not found!", NotificationType.Error, "WindowNotificationArea");
             }
         }
 
