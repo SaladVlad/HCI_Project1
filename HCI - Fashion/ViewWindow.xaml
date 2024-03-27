@@ -59,28 +59,56 @@
             Height="50">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="0.5*"/>
-                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
 
 
-            
+
             <Label
-                x:Name="IDLabel"
                 Grid.Column="0"
-                FontSize="20"
+                FontSize="25"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Center"
-                FontWeight="Bold"/>
-            <Label
-                x:Name="NameLabel"
-                Grid.Column="3"
-                FontSize="20"
-                VerticalAlignment="Center"
-                FontWeight="Bold"/> 
+                FontWeight="Bold"
+                VerticalContentAlignment="Center">
+                <Label.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <fa5:SvgAwesome
+                            Icon="Solid_Key"
+                            Margin="0 0 20 0"/>
+                        <Label
+                             x:Name="IDLabel"
+                            Content="Id Text"/>
+                    </StackPanel>
 
+                </Label.Content>
+            </Label>
+            <Label
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                FontSize="25"
+                FontWeight="Bold"
+                VerticalContentAlignment="Center">
+                <Label.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <fa5:SvgAwesome
+                            Icon="Solid_EnvelopeOpenText"
+                            Margin="20 0 10 0"/>
+                        <Label
+                            x:Name="NameLabel"
+                            Content="Name Text"/>
+                    </StackPanel>
+
+                </Label.Content>
+            </Label>
 
         </Grid>
+        <Rectangle
+            Width="700"
+            Height="6"
+            Fill="DarkOrange" 
+            Canvas.Left="75" 
+            Canvas.Top="80"/>
 
         <DockPanel>
             <DockPanel
@@ -94,7 +122,9 @@
                     Height="300"
                     Margin="0"
                     IsHitTestVisible="False"
-                    IsReadOnly="True">
+                    IsReadOnly="True"
+                    Background="Transparent"
+                    BorderThickness="0">
                 </RichTextBox>
             </DockPanel>
 
@@ -102,7 +132,7 @@
         DockPanel.Dock="Right"
         VerticalAlignment="Center"
         Margin="0 25 0 0">
-                
+
                 <Border
             BorderBrush="DarkCyan"
             BorderThickness="3">

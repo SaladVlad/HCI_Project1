@@ -21,10 +21,13 @@ namespace HCI___Fashion
     /// </summary>
     public partial class ViewWindow : Window
     {
-
+        #region  Fields
 
         private Helpers.DataIO io;
 
+        #endregion
+
+        #region UI Init
         public ViewWindow(ItemContainer itemContainer)
         {
             InitializeComponent();
@@ -44,7 +47,9 @@ namespace HCI___Fashion
             io.LoadRtfFile(itemContainer.TextPath, ViewerRichTextBox);
 
         }
+        #endregion
 
+        #region Events
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
@@ -55,5 +60,7 @@ namespace HCI___Fashion
         {
             this.DragMove();
         }
+
+        #endregion
     }
 }
