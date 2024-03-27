@@ -44,18 +44,21 @@ namespace HCI___Fashion
 
         public CreateOrEditWindow(ItemContainer itemContainer, ObservableCollection<ItemContainer> items)
         {
+            //passing the reference of the modified item
+            item = itemContainer;
+
             InitializeComponent();
             DataContext = this;
 
             notificationManager = new NotificationManager(Application.Current.Dispatcher);
             io = new Helpers.DataIO();
 
+           
+
             InitUI();
             if (itemContainer != null)
                 FillWithData(itemContainer);
 
-            //passing the reference of the modified item
-            item = itemContainer;
 
             previousID = item.Id;
 
@@ -69,7 +72,7 @@ namespace HCI___Fashion
         }
         private void FillWithData(ItemContainer itemContainer)
         {
-            IDTextBox.Text = itemContainer.Id.ToString()=="0" ? "" : itemContainer.Id.ToString();
+            IDTextBox.Text = itemContainer.Id.ToString() == "0" ? "" : itemContainer.Id.ToString();
             NameTextBox.Text = itemContainer.Name;
             if (itemContainer.ImagePath != null)
             {
@@ -135,7 +138,7 @@ namespace HCI___Fashion
             }
 
 
-            TextRange textRange = new TextRange(EditorRichTextBox.Document.ContentStart,EditorRichTextBox.Document.ContentEnd);
+            TextRange textRange = new TextRange(EditorRichTextBox.Document.ContentStart, EditorRichTextBox.Document.ContentEnd);
             if (textRange.Text.Length == 2 || textRange.Text == "")
             {
                 EditorRichTextBox.BorderBrush = Brushes.Red;
@@ -246,6 +249,27 @@ namespace HCI___Fashion
                 {
                     RaiseToast("wrongURL");
                 }
+            }
+        }
+
+        private void ImageURLTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            
+            try
+            {
+                ImageFrame.Source = new BitmapImage(new Uri(ImageURLTextBox.Text, UriKind.Absolute));
+            }
+            catch
+            {
+                if(item.ImagePath != null)
+                {
+                    ImageFrame.Source = new BitmapImage(new Uri(item.ImagePath, UriKind.Absolute));
+                }
+                else
+                {
+                    ImageFrame.Source = new BitmapImage(new Uri("ImgSourceUI/template.jpg", UriKind.RelativeOrAbsolute));
+                }
+                
             }
         }
 
@@ -427,6 +451,8 @@ namespace HCI___Fashion
             NameTextBox.BorderBrush = Brushes.DarkCyan;
             NameTextBox.BorderThickness = new Thickness(3);
         }
+
+
     }
 
     #endregion

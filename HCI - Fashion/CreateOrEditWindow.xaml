@@ -296,6 +296,7 @@
                     GotFocus="ImageURLTextBox_GotFocus"
                     LostFocus="ImageURLTextBox_LostFocus"
                     KeyDown="ImageURLTextBox_KeyDown"
+                    TextChanged="ImageURLTextBox_TextChanged"
                     BorderBrush="DarkCyan"
                     BorderThickness="3"/>
             </StackPanel>
