@@ -24,6 +24,7 @@ namespace HCI___Fashion
     /// </summary>
     public partial class CreateOrEditWindow : Window
     {
+        #region Fields and Properties
 
         private Helpers.DataIO io;
 
@@ -37,6 +38,9 @@ namespace HCI___Fashion
 
         private int previousID;
 
+        #endregion
+
+        #region InitFunctions
 
         public CreateOrEditWindow(ItemContainer itemContainer, ObservableCollection<ItemContainer> items)
         {
@@ -63,10 +67,9 @@ namespace HCI___Fashion
 
 
         }
-
         private void FillWithData(ItemContainer itemContainer)
         {
-            IDTextBox.Text = itemContainer.Id.ToString();
+            IDTextBox.Text = itemContainer.Id.ToString()=="0" ? "" : itemContainer.Id.ToString();
             NameTextBox.Text = itemContainer.Name;
             if (itemContainer.ImagePath != null)
             {
@@ -83,33 +86,19 @@ namespace HCI___Fashion
 
         private void InitUI()
         {
-
-
             FontFamilyComboBox.ItemsSource = Fonts.SystemFontFamilies.OrderBy(f => f.Source);
             FontFamilyComboBox.SelectedIndex = 0;
-
-            //foreach (KnownColor inbuiltColor in Enum.GetValues(typeof(KnownColor)))
-            //{
-            //    System.Drawing.Color loadColor = System.Drawing.Color.FromKnownColor(inbuiltColor);
-
-            //    if (loadColor.IsSystemColor == false)
-            //    {
-            //        if (loadColor.Name != "Transparent")
-            //            colorList.Add(loadColor);
-            //    }
-
-            //}
-            //ColorComboBox.ItemsSource = colorList;
-
             ColorPicker.SelectedColor = Brushes.Black.Color;
-
         }
+
+        #endregion
+
+        #region Events
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             this.DragMove();
         }
-
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
@@ -146,9 +135,19 @@ namespace HCI___Fashion
             }
 
 
-            if (ImageURLTextBox.Equals("Paste new URL...") &&
-                ImageFrame.Source == new BitmapImage(
-                    new Uri("ImgSourceUI/template.jpg", UriKind.RelativeOrAbsolute)))
+            TextRange textRange = new TextRange(EditorRichTextBox.Document.ContentStart,EditorRichTextBox.Document.ContentEnd);
+            if (textRange.Text.Length == 2 || textRange.Text == "")
+            {
+                EditorRichTextBox.BorderBrush = Brushes.Red;
+                RaiseToast("emptyRTB");
+                allGood = false;
+            }
+
+            string defaultSource = "ImgSourceUI/template.jpg";
+            Console.WriteLine(ImageFrame.Source.ToString());
+            Console.WriteLine(ImageFrame.Source.ToString().Contains(defaultSource));
+            if (ImageURLTextBox.Text.Equals("Paste new URL...") &&
+                ImageFrame.Source.ToString().Contains(defaultSource))
             {
                 ImageURLTextBox.BorderBrush = Brushes.Red;
                 RaiseToast("imageMissing");
@@ -205,6 +204,9 @@ namespace HCI___Fashion
 
         private void ImageURLTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
+            ImageURLTextBox.BorderBrush = Brushes.DarkCyan;
+            ImageURLTextBox.BorderThickness = new Thickness(3);
+
             if (ImageURLTextBox.Text.Equals("Paste new URL..."))
             {
                 ImageURLTextBox.Text = "";
@@ -230,16 +232,6 @@ namespace HCI___Fashion
                     RaiseToast("wrongURL");
                 }
             }
-        }
-
-        private void ColorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ///* Some very weird casting and substring magic :) */
-            //string s = ColorComboBox.SelectedItem.ToString();
-            //string brushName = s.Substring(s.IndexOf('[') + 1, s.IndexOf(']') - s.IndexOf('[') - 1);
-            //Brush brush = (Brush)new BrushConverter().ConvertFromString(brushName);
-            //ColorRectangle.Fill = brush;
-
         }
 
         private void ImageURLTextBox_KeyDown(object sender, KeyEventArgs e)
@@ -274,6 +266,10 @@ namespace HCI___Fashion
             if (semantic.Equals("emptyName"))
             {
                 notificationManager.Show("Name can't be Empty!", NotificationType.Error, "CreateOrUpdateWindowNotificationArea");
+            }
+            if (semantic.Equals("emptyRTB"))
+            {
+                notificationManager.Show("Description can't be empty!", NotificationType.Error, "CreateOrUpdateWindowNotificationArea");
             }
             if (semantic.Equals("imageMissing"))
             {
@@ -319,6 +315,7 @@ namespace HCI___Fashion
 
             if (fontColor is Brush brush)
             {
+                //if a proper name exists, display it instead of the hex code
                 if (brush is SolidColorBrush solidColorBrush)
                 {
                     ColorTextBox.Text = GetNameForColor(solidColorBrush.Color);
@@ -404,24 +401,6 @@ namespace HCI___Fashion
 
         }
 
-        private void IDTextBox_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            IDTextBox.BorderBrush = Brushes.DarkCyan;
-            IDTextBox.BorderThickness = new Thickness(3);
-        }
-
-        private void NameTextBox_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            NameTextBox.BorderBrush = Brushes.DarkCyan;
-            NameTextBox.BorderThickness = new Thickness(3);
-        }
-
-        private void ImageURLTextBox_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            ImageURLTextBox.BorderBrush = Brushes.DarkCyan;
-            ImageURLTextBox.BorderThickness = new Thickness(3);
-        }
-
         private void IDTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             if (!char.IsDigit(e.Text, e.Text.Length - 1))
@@ -430,5 +409,25 @@ namespace HCI___Fashion
                 e.Handled = true;
             }
         }
+
+        private void EditorRichTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            EditorRichTextBox.BorderBrush = Brushes.DarkCyan;
+            EditorRichTextBox.BorderThickness = new Thickness(3);
+        }
+
+        private void IDTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            IDTextBox.BorderBrush = Brushes.DarkCyan;
+            IDTextBox.BorderThickness = new Thickness(3);
+        }
+
+        private void NameTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            NameTextBox.BorderBrush = Brushes.DarkCyan;
+            NameTextBox.BorderThickness = new Thickness(3);
+        }
     }
+
+    #endregion
 }
