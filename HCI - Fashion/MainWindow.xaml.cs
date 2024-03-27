@@ -26,6 +26,8 @@ namespace HCI___Fashion
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        #region Fields and Properties
         public bool IsAdmin { get; }
 
         Helpers.DataIO IO = new Helpers.DataIO();
@@ -40,10 +42,13 @@ namespace HCI___Fashion
             get { return _items; }
             set { _items = value; }
         }
+
+        #endregion
+
+        #region UI Init
         public MainWindow(bool isAdmin)
         {
             //initializing UI component and setting up functionality
-            #region UI Initialization
 
             InitializeComponent();
             DataContext = this;
@@ -68,10 +73,9 @@ namespace HCI___Fashion
                 DeleteContentButton.IsEnabled = false;
                 DataGridColumn checkBoxColumn = ContentDataGrid.Columns[0];
                 checkBoxColumn.Visibility = Visibility.Collapsed;
-                ModeLabel.Visibility = Visibility.Hidden;
+                ModeLabel.Content = "Viewer mode";
             }
 
-            #endregion
 
             //Content fetch from xml
             #region Content fetch
@@ -89,6 +93,9 @@ namespace HCI___Fashion
 
         }
 
+        #endregion
+
+        #region Events
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             this.DragMove();
@@ -130,43 +137,38 @@ namespace HCI___Fashion
 
         private void DeleteContentButton_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to delete the selected items?",
-                               "Warning",
-                               MessageBoxButton.YesNo,
-                               MessageBoxImage.Warning) == MessageBoxResult.Yes)
+
+            List<ItemContainer> itemsToRemove = new List<ItemContainer>();
+
+            foreach (DataGridColumn column in ContentDataGrid.Columns)
             {
-
-                List<ItemContainer> itemsToRemove = new List<ItemContainer>();
-
-                foreach (DataGridColumn column in ContentDataGrid.Columns)
+                if (column is DataGridCheckBoxColumn checkBoxColumn)
                 {
-                    if (column is DataGridCheckBoxColumn checkBoxColumn)
+                    foreach (ItemContainer ic in ContentDataGrid.Items)
                     {
-                        foreach (ItemContainer ic in ContentDataGrid.Items)
-                        {
-                            bool? isChecked = checkBoxColumn.GetCellContent(ic) is CheckBox checkBox ? checkBox.IsChecked : null;
+                        bool? isChecked = checkBoxColumn.GetCellContent(ic) is CheckBox checkBox ? checkBox.IsChecked : null;
 
-                            if (isChecked == true)
-                            {
-                                itemsToRemove.Add(ic);
-                            }
+                        if (isChecked == true)
+                        {
+                            itemsToRemove.Add(ic);
                         }
                     }
                 }
-
-                if (itemsToRemove.Count < 1)
-                {
-                    RaiseToast("noSelectedItems");
-                    return;
-                }
-                foreach (ItemContainer ic in itemsToRemove)
-                {
-                    Items.Remove(ic);
-                }
-                //clear leftover rtf files and save
-                CleanRTFFiles();
-                io.SerializeObject(Items, "items.xml");
             }
+
+            if (itemsToRemove.Count < 1)
+            {
+                RaiseToast("noSelectedItems");
+                return;
+            }
+            foreach (ItemContainer ic in itemsToRemove)
+            {
+                Items.Remove(ic);
+            }
+            //clear leftover rtf files and save
+            CleanRTFFiles();
+            io.SerializeObject(Items, "items.xml");
+
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
@@ -218,6 +220,9 @@ namespace HCI___Fashion
             }
         }
 
+        #endregion
+
+        #region Helper Methods
         private void RaiseToast(string semantic)
         {
             if (semantic.Equals("noSelectedItems"))
@@ -233,7 +238,6 @@ namespace HCI___Fashion
                 notificationManager.Show("Edit successful", "Item has been edited sucessfully!", NotificationType.Success, "WindowNotificationArea");
             }
         }
-
 
         private void CleanRTFFiles()
         {
@@ -262,5 +266,6 @@ namespace HCI___Fashion
             }
         }
 
+        #endregion
     }
 }
