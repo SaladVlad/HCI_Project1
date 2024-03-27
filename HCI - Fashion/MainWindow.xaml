@@ -62,9 +62,9 @@
 
         <Path x:Name="UIPathOverlay"
               Stroke="DarkOrange"
-              StrokeThickness="10"
+              StrokeThickness="5"
               Fill="Beige"
-              Margin="30 0 0 0">
+              Margin="30 30 0 0">
             <Path.Data>
                 <PathGeometry>
                     <PathFigure StartPoint="200,50">
@@ -93,11 +93,44 @@
             </Path.Data>
         </Path>
 
+        <Border 
+            Width="500" 
+            Margin="355 10"
+            Background="AntiqueWhite"
+            BorderBrush="RoyalBlue"
+            BorderThickness="2">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <!-- Left Text -->
+                <TextBlock
+                    Text="80S MALE"
+                    VerticalAlignment="Center"
+                    Margin="5"
+                    FontSize="35"
+                    FontFamily="Broadway"/>
+
+                <!-- SVG Icon -->
+                <Label 
+                    HorizontalContentAlignment="Center">
+                    <fa5:SvgAwesome 
+                        Icon="Solid_Tshirt" 
+                        Width="60"/>
+                </Label>
+
+                <!-- Right Text -->
+                <TextBlock
+                    Text="FASHION"
+                    VerticalAlignment="Center"
+                    Margin="5"
+                    FontSize="35"
+                    FontFamily="Broadway"/>
+            </StackPanel>
+        </Border>
+
         <DockPanel
             Canvas.Left="0"
-            Canvas.Top="72"
+            Canvas.Top="64"
             Width="860"
-            Height="375">
+            Height="403" HorizontalAlignment="Center" VerticalAlignment="Center">
 
 
             <StackPanel
@@ -126,7 +159,7 @@
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
 
-                    
+
 
                     <Button 
                         x:Name="AddContentButton"
@@ -134,7 +167,7 @@
                         HorizontalAlignment="Center"
                         Width="150"
                         Height="50"
-                        Margin="15 60 20 10"
+                        Margin="15 90 20 10"
                         Visibility="Visible"
                         FontSize="17"
                         FontWeight="Bold"
@@ -177,7 +210,7 @@
                                 FontWeight="Bold"
                                 VerticalAlignment="Center"/>
                         </WrapPanel>
-                        
+
                     </Button>
 
                     <Label
@@ -200,32 +233,19 @@
 
 
             </StackPanel>
-            
-            <StackPanel 
-                x:Name="InteractionStackPanel"
-                Margin="10"
-                DockPanel.Dock="Bottom"
-                Orientation="Horizontal">
-                <Grid Width="600">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
 
-                    
-                </Grid>
 
-            </StackPanel>
 
 
             <!--real work begins here-->
 
             <DataGrid
                 x:Name="ContentDataGrid"
-                Margin="10 0 0 0"
-                Background="SeaShell"
-                AlternatingRowBackground="PeachPuff"
+                Margin="15 30 0 0"
+                Width="650"
+                Background="Transparent"
+                BorderBrush="Transparent"
+                BorderThickness="0"
                 CanUserAddRows="False"
                 CanUserDeleteRows="False"
                 CanUserReorderColumns="False"
