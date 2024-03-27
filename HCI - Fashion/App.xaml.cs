@@ -14,6 +14,5 @@ namespace HCI___Fashion
     public partial class App : Application
     {
     }
-
-
+     
 }
