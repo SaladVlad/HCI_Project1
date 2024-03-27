@@ -25,9 +25,16 @@ namespace HCI___Fashion
     /// </summary>
     public partial class LoginWindow : Window
     {
+        #region Fields
+
         List<User> users;
 
         NotificationManager notificationManager;
+
+        #endregion
+
+        #region InitMethods
+
         public LoginWindow()
         {
 
@@ -38,7 +45,7 @@ namespace HCI___Fashion
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Stop);
                 Environment.Exit(-1);
-                
+
             }
 
 
@@ -48,7 +55,6 @@ namespace HCI___Fashion
             notificationManager = new NotificationManager();
             UsernameTextBox.Focus();
         }
-
         public bool IsConnectedToInternet()
         {
             Ping p = new Ping();
@@ -62,6 +68,10 @@ namespace HCI___Fashion
                 return false;
             }
         }
+
+        #endregion
+
+        #region Events
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
@@ -189,5 +199,7 @@ namespace HCI___Fashion
                 LoginButton_Click(sender,e);
             }
         }
+
+        #endregion
     }
 }
