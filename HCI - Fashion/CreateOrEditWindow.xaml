@@ -21,7 +21,7 @@
         <notifications:NotificationArea
             x:Name="CreateOrUpdateWindowNotificationArea"
             Panel.ZIndex="1000"
-            MaxItems="3"
+            MaxItems="4"
             Position="TopCenter"
             Margin="250 5 0 0"
             Width="300"/>
@@ -90,7 +90,7 @@
                 Margin="5"
                 HorizontalAlignment="Left"
                 VerticalContentAlignment="Center"
-                MouseLeftButtonDown="IDTextBox_MouseLeftButtonDown"
+                GotFocus="IDTextBox_GotFocus"
                 PreviewTextInput="IDTextBox_PreviewTextInput"
                 FontSize="15"
                 BorderBrush="DarkCyan"
@@ -113,7 +113,7 @@
                 FontSize="15"
                 BorderBrush="DarkCyan"
                 BorderThickness="3"
-                MouseLeftButtonDown="NameTextBox_MouseLeftButtonDown"/>
+                GotFocus="NameTextBox_GotFocus"/>
 
 
         </Grid>
@@ -236,24 +236,6 @@
 
                     <Separator/>
 
-                    <!--<WrapPanel>
-                        <Rectangle
-                            x:Name="ColorRectangle"
-                            Width="23"
-                            Height="23"
-                            Fill="Black"/>
-                        <ComboBox
-                            x:Name="ColorComboBox"
-                            Width="80"
-                            ToolTip="Color picker"
-                            SelectionChanged="ColorComboBox_SelectionChanged"
-                            IsTextSearchEnabled="True"
-                            IsTextSearchCaseSensitive="False">
-
-                        </ComboBox>
-                    </WrapPanel>-->
-
-                    
 
                     <xctk:ColorPicker
                         x:Name="ColorPicker"
@@ -276,6 +258,9 @@
                     Margin="0"
                     TextChanged="EditorRichTextBox_TextChanged"
                     SelectionChanged="EditorRichTextBox_SelectionChanged"
+                    BorderBrush="DarkCyan"
+                    BorderThickness="3"
+                    GotFocus="EditorRichTextBox_GotFocus"
                     > 
 
                 </RichTextBox>
@@ -311,7 +296,6 @@
                     GotFocus="ImageURLTextBox_GotFocus"
                     LostFocus="ImageURLTextBox_LostFocus"
                     KeyDown="ImageURLTextBox_KeyDown"
-                    MouseLeftButtonDown="ImageURLTextBox_MouseLeftButtonDown"
                     BorderBrush="DarkCyan"
                     BorderThickness="3"/>
             </StackPanel>
