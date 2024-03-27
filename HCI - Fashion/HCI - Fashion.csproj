@@ -139,7 +139,6 @@
       <DependentUpon>CreateOrEditWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\DataIO.cs" />
-    <Compile Include="Helpers\ToastNotification.cs" />
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
@@ -182,9 +181,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="ImgSourceUI\Backdrop.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="ImgSourceUI\BackdropDark.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="ImgSourceUI\template.jpg" />
