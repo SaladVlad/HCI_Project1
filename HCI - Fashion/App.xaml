@@ -27,11 +27,6 @@
                                 <Trigger.EnterActions>
                                     <BeginStoryboard>
                                         <Storyboard>
-                                            <DoubleAnimation 
-                                                Storyboard.TargetProperty="Opacity"
-                                                From="1.0"
-                                                To="0.7"
-                                                Duration="0:0:0.2"/>
                                             <ColorAnimation 
                                                 Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
                                                 To="DarkCyan" 
@@ -43,11 +38,6 @@
                                 <Trigger.ExitActions>
                                     <BeginStoryboard>
                                         <Storyboard>
-                                            <DoubleAnimation 
-                                                Storyboard.TargetProperty="Opacity"
-                                                From="0.7" 
-                                                To="1.0" 
-                                                Duration="0:0:0.2"/>
                                             <ColorAnimation 
                                                 Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
                                                 To="LightCyan" 
