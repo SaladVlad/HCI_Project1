@@ -104,11 +104,11 @@
 
         </Grid>
         <Rectangle
-            Width="700"
+            Width="692"
             Height="6"
             Fill="DarkOrange" 
             Canvas.Left="75" 
-            Canvas.Top="80"/>
+            Canvas.Top="85" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
         <DockPanel>
             <DockPanel
