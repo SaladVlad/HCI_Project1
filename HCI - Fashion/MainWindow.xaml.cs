@@ -30,12 +30,10 @@ namespace HCI___Fashion
         #region Fields and Properties
         public bool IsAdmin { get; }
 
-        Helpers.DataIO IO = new Helpers.DataIO();
-
         ObservableCollection<ItemContainer> _items;
-        private NotificationManager notificationManager;
+        private readonly NotificationManager _notificationManager;
 
-        Helpers.DataIO io = new Helpers.DataIO();
+        readonly DataIO _io = new DataIO();
 
         public ObservableCollection<ItemContainer> Items
         {
@@ -53,7 +51,7 @@ namespace HCI___Fashion
             InitializeComponent();
             DataContext = this;
 
-            notificationManager = new NotificationManager();
+            _notificationManager = new NotificationManager();
 
             IsAdmin = isAdmin;
 
@@ -81,7 +79,7 @@ namespace HCI___Fashion
             #region Content fetch
             try
             {
-                Items = IO.DeSerializeObject<ObservableCollection<ItemContainer>>("items.xml");
+                Items = _io.DeSerializeObject<ObservableCollection<ItemContainer>>("items.xml");
             }
 
             catch (Exception e)
@@ -130,7 +128,7 @@ namespace HCI___Fashion
             {
                 Items.Add(newItem);
                 RaiseToast("creationSuccessful");
-                io.SerializeObject(Items, "items.xml");
+                _io.SerializeObject(Items, "items.xml");
             }
 
         }
@@ -167,7 +165,7 @@ namespace HCI___Fashion
             }
             //clear leftover rtf files and save
             CleanRTFFiles();
-            io.SerializeObject(Items, "items.xml");
+            _io.SerializeObject(Items, "items.xml");
 
         }
 
@@ -227,15 +225,15 @@ namespace HCI___Fashion
         {
             if (semantic.Equals("noSelectedItems"))
             {
-                notificationManager.Show("Error", "There are no selected items for deletion!", NotificationType.Error, "WindowNotificationArea");
+                _notificationManager.Show("Error", "There are no selected items for deletion!", NotificationType.Error, "WindowNotificationArea");
             }
             if (semantic.Equals("creationSuccessful"))
             {
-                notificationManager.Show("Creation successful", "Item has been added to the list!", NotificationType.Success, "WindowNotificationArea");
+                _notificationManager.Show("Creation successful", "Item has been added to the list!", NotificationType.Success, "WindowNotificationArea");
             }
             if (semantic.Equals("editSuccessful"))
             {
-                notificationManager.Show("Edit successful", "Item has been edited sucessfully!", NotificationType.Success, "WindowNotificationArea");
+                _notificationManager.Show("Edit successful", "Item has been edited sucessfully!", NotificationType.Success, "WindowNotificationArea");
             }
         }
 
