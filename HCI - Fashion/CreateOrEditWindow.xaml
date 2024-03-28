@@ -231,6 +231,7 @@
                         ToolTip="Enter font size"
                         LostFocus="FontSizeTextBox_LostFocus"
                         PreviewKeyDown="FontSizeTextBox_PreviewKeyDown"
+                        PreviewTextInput="FontSizeTextBox_PreviewTextInput"
                         >
                     </TextBox>
 
