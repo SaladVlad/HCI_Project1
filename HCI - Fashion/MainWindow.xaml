@@ -5,6 +5,7 @@
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HCI___Fashion"
+        xmlns:notifications="clr-namespace:Notification.Wpf.Controls;assembly=Notification.Wpf"
         mc:Ignorable="d"
         Title="80s Male Fashion Sets" 
         SizeToContent="WidthAndHeight"
@@ -12,7 +13,15 @@
         AllowsTransparency="True"
         Background="Transparent"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
+
     <Canvas Width="900" Height="500">
+
+        <notifications:NotificationArea
+            x:Name="WindowNotificationArea"
+            Panel.ZIndex="1000"
+            MaxItems="3"
+            Position="TopCenter"
+            Margin="275 0 0 0"/>
 
         <Path x:Name="UIPath"
               Stroke="DarkCyan"
@@ -22,117 +31,178 @@
             </Path.Fill>
             <Path.Data>
                 <PathGeometry>
-                    <PathFigure StartPoint="250,0">
-
+                    <PathFigure StartPoint="50,0">
                         <ArcSegment
-                            IsLargeArc="False"
-                            Point="250,500"
-                            RotationAngle="180"
-                            Size="250,250"
-                            SweepDirection="Counterclockwise" />
-                        <LineSegment Point="250,500" />
-                        <!--The grooves bottom-->
-                        <LineSegment Point="400,500"/>
-                        <LineSegment Point="425,475"/>
-
-                        <LineSegment Point="450,500"/>
-
-                        <LineSegment Point="475,475"/>
-                        <LineSegment Point="500,500"/>
-                        <!--End of bottom grooves-->
-                        <LineSegment Point="650,500" />
+                            Size="50,50"
+                            SweepDirection="Counterclockwise"
+                            Point="0,50"/>
+                        <LineSegment Point="0,450"/>
                         <ArcSegment
-                            IsLargeArc="True"
-                            Point="650,0"
-                            RotationAngle="180"
-                            Size="150,150"
-                            SweepDirection="CounterClockwise" />
-                        <!--The grooves part 2-->
-                        <LineSegment Point="500,0"/>
-                        <LineSegment Point="475,25"/>
+                            Size="50,50"
+                            SweepDirection="Counterclockwise"
+                            Point="50,500"/>
+                        <LineSegment Point="850,500"/>
+                        <ArcSegment
+                            Size="50,50"
+                            SweepDirection="Counterclockwise"
+                            Point="900,450"/>
+                        <LineSegment Point="900,50"/>
+                        <ArcSegment
+                            Size="50,50"
+                            SweepDirection="Counterclockwise"
+                            Point="850,0"/>
+                        <LineSegment Point="50,0"/>
+                    </PathFigure>
 
-                        <LineSegment Point="450,0"/>
+                </PathGeometry>
+            </Path.Data>
+        </Path>
 
-                        <LineSegment Point="425,25"/>
-                        <LineSegment Point="400,0"/>
-                        <!--The end of grooves part 2-->
-
-                        <LineSegment Point="250,0" />
+        <Path x:Name="UIPathOverlay"
+              Stroke="DarkOrange"
+              StrokeThickness="5"
+              Fill="Beige"
+              Margin="30 30 0 0">
+            <Path.Data>
+                <PathGeometry>
+                    <PathFigure StartPoint="200,50">
+                        <ArcSegment
+                            Size="50,50"
+                            SweepDirection="Counterclockwise"
+                            Point="150,100"/>
+                        <LineSegment Point="150,400"/>
+                        <ArcSegment
+                            Size="50,50"
+                            SweepDirection="Counterclockwise"
+                            Point="200,450"/>
+                        <LineSegment Point="800,450"/>
+                        <ArcSegment
+                            Size="50,50"
+                            SweepDirection="Counterclockwise"
+                            Point="850,400"/>
+                        <LineSegment Point="850,100"/>
+                        <ArcSegment
+                            Size="50,50"
+                            SweepDirection="Counterclockwise"
+                            Point="800,50"/>
+                        <LineSegment Point="200,50"/>
                     </PathFigure>
                 </PathGeometry>
             </Path.Data>
         </Path>
 
+        <Border 
+            Width="500" 
+            Margin="355 10"
+            Background="AntiqueWhite"
+            BorderBrush="RoyalBlue"
+            BorderThickness="2">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <!-- Left Text -->
+                <TextBlock
+                    Text="80S MALE"
+                    VerticalAlignment="Center"
+                    Margin="5"
+                    FontSize="35"
+                    FontFamily="Broadway"/>
+
+                <!-- SVG Icon -->
+                <Label 
+                    HorizontalContentAlignment="Center">
+                    <fa5:SvgAwesome 
+                        Icon="Solid_Tshirt" 
+                        Width="60"/>
+                </Label>
+
+                <!-- Right Text -->
+                <TextBlock
+                    Text="FASHION"
+                    VerticalAlignment="Center"
+                    Margin="5"
+                    FontSize="35"
+                    FontFamily="Broadway"/>
+            </StackPanel>
+        </Border>
+
         <DockPanel
             Canvas.Left="0"
-            Canvas.Top="50"
-            Width="900"
-            Height="425">
-            
+            Canvas.Top="64"
+            Width="860"
+            Height="403" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+            <!--Stackpanel for all buttons-->
             
             <StackPanel
-                x:Name="DarkModeToggleStackPanel"
+                x:Name="ButtonsStackPanel"
                 DockPanel.Dock="Left"
-                VerticalAlignment="Center">
-                <ToggleButton
-                    x:Name="DarkModeToggleButton"
-                    Width="80"
-                    Height="80"
-                    Margin="30 0"
-                    Cursor="Hand">
-                    Dark Mode
-                </ToggleButton>
-            </StackPanel>
-            
-            <StackPanel
-                x:Name="ExitButtonStackPanel"
-                DockPanel.Dock="Right"
-                VerticalAlignment="Center">
+                VerticalAlignment="Top"
+                HorizontalAlignment="Left">
 
-                <Button
-                    x:Name="ExitButton"
-                    Width="80"
-                    Height="80"
-                    Margin="30 0"
-                    Cursor="Hand"
-                    Click="ExitButton_Click">
-                    Exit
-                    <Button.Style>
-                        <Style>
-                            
-                        </Style>
-                    </Button.Style>
-                </Button>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
 
-            </StackPanel>
 
-            <StackPanel 
-                x:Name="InteractionStackPanel"
-                Margin="10"
-                DockPanel.Dock="Bottom"
-                Orientation="Horizontal">
-                <Grid Width="600">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    
+                   
                     <Button 
                         x:Name="AddContentButton"
-                        Grid.Column="0" 
+                        Grid.Row="0" 
                         HorizontalAlignment="Center"
                         Width="150"
                         Height="50"
+                        Margin="15 90 20 10"
                         Visibility="Visible"
-                        FontSize="20"
+                        FontSize="17"
                         FontWeight="Bold"
-                        Cursor="Hand">
-                        Add Set
+                        Cursor="Hand"
+                        Click="AddContentButton_Click">
+                        Add Item
+                    </Button>
+
+                    <Button 
+                        x:Name="DeleteContentButton"
+                        Grid.Row="1" 
+                        HorizontalAlignment="Center"
+                        Width="150"
+                        Height="50"
+                        Margin="15 10 20 10"
+                        FontSize="17"
+                        FontWeight="Bold"
+                        Cursor="Hand"
+                        Click="DeleteContentButton_Click">
+                        Remove Checked
+                    </Button>
+
+                    <Button
+                        x:Name="ExitButton"
+                        Grid.Row="2"
+                        Width="150"
+                        Height="50"
+                        Margin="15 10 20 10"
+                        Cursor="Hand"
+                        Click="ExitButton_Click">
+                        <WrapPanel>
+                            <fa5:SvgAwesome
+                                Height="30"
+                                Width="30"
+                                Icon="Regular_WindowClose"
+                                Foreground="Red"/>
+                            <Label 
+                                Content="Exit"
+                                FontSize="18"
+                                FontWeight="Bold"
+                                VerticalAlignment="Center"/>
+                        </WrapPanel>
+
                     </Button>
 
                     <Label
-                        Grid.Column="1"
+                        Margin="15 10 20 10"
+                        Grid.Row="3"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         FontSize="20"
@@ -141,36 +211,95 @@
                         Background="#fd7662"
                         BorderBrush="Black"
                         BorderThickness="3"
-                        x:Name="AdminModeLabel"
+                        x:Name="ModeLabel"
                         Content="Admin mode">
-                        
+
                     </Label>
-                    
-                    <Button 
-                        x:Name="DeleteContentButton"
-                        Grid.Column="2" 
-                        HorizontalAlignment="Center"
-                        Width="150"
-                        Height="50"
-                        FontSize="20"
-                        FontWeight="Bold"
-                        Cursor="Hand">
-                        Remove Set
-                    </Button>
+
                 </Grid>
+
 
             </StackPanel>
 
+            <!--Datagrid with all items-->
 
-            <!--the real work begins here-->
-            
             <DataGrid
                 x:Name="ContentDataGrid"
-                Background="SeaShell">
+                Margin="15 30 0 0"
+                Width="650"
+                Background="Transparent"
+                BorderBrush="Transparent"
+                BorderThickness="0"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                CanUserReorderColumns="False"
+                CanUserSortColumns="False"
+                IsReadOnly="False"
+                ScrollViewer.CanContentScroll="True"
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                ItemsSource="{Binding Items}"
+                AutoGenerateColumns="False"
+                VirtualizingPanel.ScrollUnit="Pixel">
+
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        <Style.Triggers>
+                            <Trigger Property="DataGridCell.IsSelected" Value="True">
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
+
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn
+                        Header="Select"
+                        MaxWidth="45"
+                        CanUserResize="False"/>
+
+                    <DataGridHyperlinkColumn
+                        x:Name="NameTextColumn"
+                        Header="Name"
+                        Width="150"
+                        MaxWidth="200"
+                        MinWidth="60"
+                        Binding="{Binding Name}">
+                        <DataGridHyperlinkColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="TextWrapping" Value="WrapWithOverflow"/>
+                                <Setter Property="FontSize" Value="20"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <EventSetter Event="Hyperlink.RequestNavigate" Handler="Hyperlink_RequestNavigate"/>
+                            </Style>
+                        </DataGridHyperlinkColumn.ElementStyle>
+                    </DataGridHyperlinkColumn>
+
+                    <DataGridTemplateColumn
+                        Header="Image"
+                        MaxWidth="200"
+                        MinWidth="100"
+                        Width="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding ImagePath}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTextColumn 
+                        Header="Creation Date"
+                        Binding="{Binding CreationDate}"
+                        Width="500"/>
+
+                </DataGrid.Columns>
 
             </DataGrid>
         </DockPanel>
-        
-        
+
+
     </Canvas>
 </Window>

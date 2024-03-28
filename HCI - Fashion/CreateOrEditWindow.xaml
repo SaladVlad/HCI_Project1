@@ -4,9 +4,306 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HCI___Fashion"
+        xmlns:fa5="http://schemas.fontawesome.com/icons/"
+        xmlns:notifications="clr-namespace:Notification.Wpf.Controls;assembly=Notification.Wpf"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="CreateOrEditWindow" Height="450" Width="800">
-    <Grid>
+        d:DataContext=""
+        Title="Item Creation" 
+        SizeToContent="WidthAndHeight"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+    <Canvas
+        Width="800" Height="500">
+
+        <notifications:NotificationArea
+            x:Name="CreateOrUpdateWindowNotificationArea"
+            Panel.ZIndex="1000"
+            MaxItems="4"
+            Position="TopCenter"
+            Margin="250 5 0 0"
+            Width="300"/>
+
+        <Path
+            x:Name="UIPath"
+            Stroke="DarkCyan"
+            StrokeThickness="8"
+            Fill="LightCyan">
+            <Path.Data>
+                <PathGeometry>
+                    <PathFigure StartPoint="0,100">
+                        <LineSegment Point="0,500"/>
+                        <LineSegment Point="700,500"/>
+                        <LineSegment Point="800,400"/>
+                        <LineSegment Point="800,0"/>
+                        <LineSegment Point="100,0"/>
+                        <LineSegment Point="0,100"/>
+                    </PathFigure>
+                </PathGeometry>
+            </Path.Data>
+        </Path>
+
+        <Path
+            x:Name="UIPathUnderlay"
+            Stroke="DarkOrange"
+            StrokeThickness="40"
+            Fill="DarkOrange"
+            Panel.ZIndex="-1">
+            <Path.Data>
+                <PathGeometry>
+                    <PathFigure StartPoint="25,25">
+                        <LineSegment Point="25,475"/>
+                        <LineSegment Point="775,475"/>
+                        <LineSegment Point="775,25"/>
+                        <LineSegment Point="25,25"/>
+                    </PathFigure>
+                </PathGeometry>
+            </Path.Data>
+        </Path>
+
+        <Grid
+            Canvas.Top="20"
+            Canvas.Left="100"
+            Width="650"
+            Height="50">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="1.6*"/>
+                <ColumnDefinition Width="6*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label
+                Grid.Column="0"
+                Content="ID:"
+                FontSize="20"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                FontWeight="Bold"/>
+            <TextBox
+                x:Name="IDTextBox"
+                Grid.Column="1"
+                Width="250"
+                Height="30"
+                Margin="5"
+                HorizontalAlignment="Left"
+                VerticalContentAlignment="Center"
+                GotFocus="IDTextBox_GotFocus"
+                PreviewTextInput="IDTextBox_PreviewTextInput"
+                FontSize="15"
+                BorderBrush="DarkCyan"
+                BorderThickness="3"
+                />
+            <Label
+                Grid.Column="2"
+                Content="Name:"
+                FontSize="20"
+                VerticalAlignment="Center"
+                FontWeight="Bold"/>
+            <TextBox
+                x:Name="NameTextBox"
+                Grid.Column="3"
+                Width="250"
+                Height="30"
+                Margin="5"
+                HorizontalAlignment="Left"
+                VerticalContentAlignment="Center"
+                FontSize="15"
+                BorderBrush="DarkCyan"
+                BorderThickness="3"
+                GotFocus="NameTextBox_GotFocus"/>
+
+
+        </Grid>
         
-    </Grid>
+        <DockPanel>
+            <DockPanel
+                Canvas.Top="25" 
+                Canvas.Left="25"
+                Margin="20 100">
+                <StackPanel
+                    x:Name="InfoStackPanel"
+                    Margin="0"
+                    DockPanel.Dock="Bottom"
+                    Orientation="Horizontal">
+                    <WrapPanel
+                        x:Name="WordCountPanel">
+                        <fa5:SvgAwesome Icon="Solid_Paperclip" Width="10" Foreground="Black"/>
+                        <Label 
+                            Content="Word count:"
+                            x:Name="WordCountLabel"></Label>
+                    </WrapPanel>
+                    
+
+                    <Button 
+                        x:Name="SaveButton"
+                        Content="Save"
+                        Margin="100 10 10 10"
+                        Width="150"
+                        Height="50"
+                        FontSize="18"
+                        FontWeight="Bold"
+                        Click="SaveButton_Click"/>
+                    <Button 
+                        x:Name="CancelButton"
+                        Content="Cancel"
+                        Margin="0"
+                        Width="150"
+                        Height="50"
+                        FontSize="18"
+                        FontWeight="Bold"
+                        Click="CancelButton_Click"/>
+                </StackPanel>
+
+                <ToolBar 
+                    Name="EditorToolBar" 
+                    DockPanel.Dock="Top">   
+                    <ToggleButton
+                        Name="BoldToggleButton"
+                        Command="EditingCommands.ToggleBold"
+                        ToolTip="Bold">
+                        <fa5:SvgAwesome
+                            Height="15"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="Black"
+                            Icon="Solid_Bold"/>
+                    </ToggleButton>
+                    
+                    <Separator />
+
+                    <ToggleButton
+                        Name="ItalicToggleButton"
+                        Command="EditingCommands.ToggleItalic"
+                        ToolTip="Italic">
+                        <fa5:SvgAwesome
+                            Height="15"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="Black"
+                            Icon="Solid_Italic"/>
+                    </ToggleButton>
+
+                    <Separator/>
+
+                    
+
+                    <ToggleButton
+                        Name="UnderlineToggleButton"
+                        Command="EditingCommands.ToggleUnderline"
+                        ToolTip="Underline">
+                        <fa5:SvgAwesome
+                            Height="15"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="Black"
+                            Icon="Solid_Underline"/>
+                    </ToggleButton>
+
+                    <Separator/>
+                    
+                    <ComboBox
+                        Name="FontFamilyComboBox"
+                        Width="120"
+                        IsTextSearchCaseSensitive="False"
+                        IsTextSearchEnabled="True"
+                        SelectionChanged="FontFamilyComboBox_SelectionChanged"
+                        ToolTip="Choose font"
+                        BorderBrush="Black"
+                        BorderThickness="1"/>
+
+                    <Separator/>
+                    <fa5:SvgAwesome
+                        Icon="Solid_Font"
+                        Width="15"
+                        Height="15"
+                        ToolTip="Enter font size"/>
+                    <TextBox
+                        x:Name="FontSizeTextBox"
+                        Width="30"
+                        Height="20"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        Text="12"
+                        HorizontalContentAlignment="Right"
+                        ToolTip="Enter font size"
+                        LostFocus="FontSizeTextBox_LostFocus"
+                        PreviewKeyDown="FontSizeTextBox_PreviewKeyDown"
+                        PreviewTextInput="FontSizeTextBox_PreviewTextInput"
+                        >
+                    </TextBox>
+
+                    <Separator/>
+
+
+                    <xctk:ColorPicker
+                        x:Name="ColorPicker"
+                        Width="40"
+                        MaxWidth="40"
+                        SelectedColorChanged="ColorPicker_SelectedColorChanged"/>
+
+                    <TextBox 
+                        x:Name="ColorTextBox"
+                        Width="90"
+                        IsManipulationEnabled="False"
+                        BorderBrush="Black"
+                        BorderThickness="1"/>
+
+                </ToolBar>
+                <RichTextBox 
+                    x:Name="EditorRichTextBox"
+                    Width="500" 
+                    Height="300"
+                    Margin="0"
+                    TextChanged="EditorRichTextBox_TextChanged"
+                    SelectionChanged="EditorRichTextBox_SelectionChanged"
+                    BorderBrush="DarkCyan"
+                    BorderThickness="3"
+                    GotFocus="EditorRichTextBox_GotFocus"
+                    > 
+
+                </RichTextBox>
+            </DockPanel>
+
+            <StackPanel
+                DockPanel.Dock="Right"
+                VerticalAlignment="Center"
+                Margin="0 -90 0 0">
+                <Label 
+                    Content="Picture:"
+                    FontSize="20"
+                    FontWeight="Bold"/>
+                <Border
+                    BorderBrush="DarkCyan"
+                    BorderThickness="3">
+                    <Image 
+                        x:Name="ImageFrame"
+                        Source="ImgSourceUI/template.jpg"
+                        MaxWidth="225"
+                        MaxHeight="225"
+                        Height="Auto"/>
+                </Border>
+                <TextBox
+                    x:Name="ImageURLTextBox"
+                    Margin="0 20 0 0"
+                    Height="30"
+                    MaxWidth="225"
+                    Text="Paste new URL..."
+                    VerticalContentAlignment="Center"
+                    FontSize="15"
+                    Foreground="Gray"
+                    GotFocus="ImageURLTextBox_GotFocus"
+                    LostFocus="ImageURLTextBox_LostFocus"
+                    KeyDown="ImageURLTextBox_KeyDown"
+                    TextChanged="ImageURLTextBox_TextChanged"
+                    BorderBrush="DarkCyan"
+                    BorderThickness="3"/>
+            </StackPanel>
+            
+        </DockPanel>
+
+          
+    </Canvas>
 </Window>
