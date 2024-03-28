@@ -14,8 +14,6 @@
         Background="Transparent"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
 
-
-
     <Canvas Width="900" Height="500">
 
         <notifications:NotificationArea
@@ -132,24 +130,13 @@
             Width="860"
             Height="403" HorizontalAlignment="Center" VerticalAlignment="Center">
 
-
+            <!--Stackpanel for all buttons-->
+            
             <StackPanel
-                x:Name="DarkModeToggleStackPanel"
+                x:Name="ButtonsStackPanel"
                 DockPanel.Dock="Left"
                 VerticalAlignment="Top"
                 HorizontalAlignment="Left">
-
-                <!--<ToggleButton
-                    x:Name="DarkModeToggleButton"
-                    Width="80"
-                    Height="80"
-                    Margin="10 10 10 100"
-                    Cursor="Hand"
-                    ToolTip="Dark Mode">
-                    <fa5:SvgAwesome Icon="Solid_Moon"
-                                    Foreground="Black"
-                                    Width="50"/>
-                </ToggleButton>-->
 
                 <Grid>
                     <Grid.RowDefinitions>
@@ -160,7 +147,7 @@
                     </Grid.RowDefinitions>
 
 
-
+                   
                     <Button 
                         x:Name="AddContentButton"
                         Grid.Row="0" 
@@ -234,10 +221,7 @@
 
             </StackPanel>
 
-
-
-
-            <!--real work begins here-->
+            <!--Datagrid with all items-->
 
             <DataGrid
                 x:Name="ContentDataGrid"
@@ -259,7 +243,8 @@
                 VirtualizingPanel.ScrollUnit="Pixel">
 
                 <DataGrid.CellStyle>
-                    <Style TargetType="{x:Type DataGridCell}">
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
                         <Style.Triggers>
                             <Trigger Property="DataGridCell.IsSelected" Value="True">
                                 <Setter Property="BorderBrush" Value="Transparent"/>
@@ -287,6 +272,7 @@
                             <Style TargetType="TextBlock">
                                 <Setter Property="TextWrapping" Value="WrapWithOverflow"/>
                                 <Setter Property="FontSize" Value="20"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
                                 <EventSetter Event="Hyperlink.RequestNavigate" Handler="Hyperlink_RequestNavigate"/>
                             </Style>
                         </DataGridHyperlinkColumn.ElementStyle>
@@ -295,7 +281,8 @@
                     <DataGridTemplateColumn
                         Header="Image"
                         MaxWidth="200"
-                        MinWidth="200">
+                        MinWidth="100"
+                        Width="100">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Image Source="{Binding ImagePath}"/>
@@ -309,8 +296,6 @@
                         Width="500"/>
 
                 </DataGrid.Columns>
-
-
 
             </DataGrid>
         </DockPanel>
