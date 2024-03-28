@@ -26,17 +26,15 @@ namespace HCI___Fashion
     {
         #region Fields and Properties
 
-        private Helpers.DataIO io;
+        private readonly Helpers.DataIO _io;
 
-        private NotificationManager notificationManager;
+        private readonly NotificationManager _notificationManager;
 
-        private List<System.Drawing.Color> colorList = new List<System.Drawing.Color>();
+        private readonly ItemContainer _item;
 
-        private ItemContainer item;
+        private readonly List<int> IDs;
 
-        private List<int> IDs;
-
-        private int previousID;
+        private readonly int _previousID;
 
         #endregion
 
@@ -45,13 +43,13 @@ namespace HCI___Fashion
         public CreateOrEditWindow(ItemContainer itemContainer, ObservableCollection<ItemContainer> items)
         {
             //passing the reference of the modified item
-            item = itemContainer;
+            _item = itemContainer;
 
             InitializeComponent();
             DataContext = this;
 
-            notificationManager = new NotificationManager(Application.Current.Dispatcher);
-            io = new Helpers.DataIO();
+            _notificationManager = new NotificationManager(Application.Current.Dispatcher);
+            _io = new Helpers.DataIO();
 
            
 
@@ -60,7 +58,7 @@ namespace HCI___Fashion
                 FillWithData(itemContainer);
 
 
-            previousID = item.Id;
+            _previousID = _item.Id;
 
             IDs = new List<int>();
             foreach (ItemContainer ic in items)
@@ -83,7 +81,7 @@ namespace HCI___Fashion
             {
                 ImageFrame.Source = new BitmapImage(new Uri("ImgSourceUI/template.jpg", UriKind.RelativeOrAbsolute));
             }
-            io.LoadRtfFile(itemContainer.TextPath, EditorRichTextBox);
+            _io.LoadRtfFile(itemContainer.TextPath, EditorRichTextBox);
 
         }
 
@@ -111,7 +109,7 @@ namespace HCI___Fashion
             if (!IDTextBox.Text.Equals(string.Empty))
             {
                 int i = int.Parse(IDTextBox.Text);
-                if (IDs.Contains(i) && previousID != i)
+                if (IDs.Contains(i) && _previousID != i)
                 {
 
                     IDTextBox.BorderBrush = Brushes.Red;
@@ -160,26 +158,26 @@ namespace HCI___Fashion
             if (allGood)
             {
                 //item didn't exist before, so mark it's creation time
-                if (item.Name == null)
+                if (_item.Name == null)
                 {
-                    item.CreationDate = DateTime.Now;
+                    _item.CreationDate = DateTime.Now;
                 }
 
-                item.Id = int.Parse(IDTextBox.Text);
-                item.Name = NameTextBox.Text;
-                item.ImagePath = ImageFrame.Source.ToString();
+                _item.Id = int.Parse(IDTextBox.Text);
+                _item.Name = NameTextBox.Text;
+                _item.ImagePath = ImageFrame.Source.ToString();
 
 
                 //rename the .rtf file if ID changed                
-                if (previousID != item.Id && File.Exists(item.TextPath))
+                if (_previousID != _item.Id && File.Exists(_item.TextPath))
                 {
-                    System.IO.File.Move(item.TextPath, "item" + IDTextBox.Text + ".rtf");
+                    System.IO.File.Move(_item.TextPath, "item" + IDTextBox.Text + ".rtf");
                 }
 
-                item.TextPath = "item" + IDTextBox.Text + ".rtf";
+                _item.TextPath = "item" + IDTextBox.Text + ".rtf";
 
 
-                io.SaveAsRtfFile(item.TextPath, EditorRichTextBox);
+                _io.SaveAsRtfFile(_item.TextPath, EditorRichTextBox);
 
 
                 this.Close();
@@ -233,6 +231,8 @@ namespace HCI___Fashion
                 catch
                 {
                     RaiseToast("wrongURL");
+                    ImageURLTextBox.BorderBrush = Brushes.Red;
+                    ImageURLTextBox.BorderThickness = new Thickness(3);
                 }
             }
         }
@@ -261,9 +261,9 @@ namespace HCI___Fashion
             }
             catch
             {
-                if(item.ImagePath != null)
+                if(_item.ImagePath != null)
                 {
-                    ImageFrame.Source = new BitmapImage(new Uri(item.ImagePath, UriKind.Absolute));
+                    ImageFrame.Source = new BitmapImage(new Uri(_item.ImagePath, UriKind.Absolute));
                 }
                 else
                 {
@@ -277,27 +277,27 @@ namespace HCI___Fashion
         {
             if (semantic.Equals("wrongURL"))
             {
-                notificationManager.Show("URL is not valid!", NotificationType.Error, "CreateOrUpdateWindowNotificationArea");
+                _notificationManager.Show("URL is not valid!", NotificationType.Error, "CreateOrUpdateWindowNotificationArea");
             }
             if (semantic.Equals("emptyID"))
             {
-                notificationManager.Show("ID can't be Empty!", NotificationType.Error, "CreateOrUpdateWindowNotificationArea");
+                _notificationManager.Show("ID can't be Empty!", NotificationType.Error, "CreateOrUpdateWindowNotificationArea");
             }
             if (semantic.Equals("existsID"))
             {
-                notificationManager.Show("ID already exists!", NotificationType.Error, "CreateOrUpdateWindowNotificationArea");
+                _notificationManager.Show("ID already exists!", NotificationType.Error, "CreateOrUpdateWindowNotificationArea");
             }
             if (semantic.Equals("emptyName"))
             {
-                notificationManager.Show("Name can't be Empty!", NotificationType.Error, "CreateOrUpdateWindowNotificationArea");
+                _notificationManager.Show("Name can't be Empty!", NotificationType.Error, "CreateOrUpdateWindowNotificationArea");
             }
             if (semantic.Equals("emptyRTB"))
             {
-                notificationManager.Show("Description can't be empty!", NotificationType.Error, "CreateOrUpdateWindowNotificationArea");
+                _notificationManager.Show("Description can't be empty!", NotificationType.Error, "CreateOrUpdateWindowNotificationArea");
             }
             if (semantic.Equals("imageMissing"))
             {
-                notificationManager.Show("Image can't be empty! Please choose a new Image.", NotificationType.Error, "CreateOrUpdateWindowNotificationArea");
+                _notificationManager.Show("Image can't be empty! Please choose a new Image.", NotificationType.Error, "CreateOrUpdateWindowNotificationArea");
 
             }
         }
@@ -385,10 +385,7 @@ namespace HCI___Fashion
 
             TextRange selectionRange = new TextRange(EditorRichTextBox.Selection.Start, EditorRichTextBox.Selection.End);
 
-            if (selectionRange != null)
-            {
-                selectionRange.ApplyPropertyValue(TextElement.FontSizeProperty, size);
-            }
+            selectionRange?.ApplyPropertyValue(TextElement.FontSizeProperty, size);
         }
 
         private void FontSizeTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -411,6 +408,15 @@ namespace HCI___Fashion
             }
         }
 
+        private void FontSizeTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (!char.IsDigit(e.Text, e.Text.Length - 1))
+            {
+                // If it's not a digit, mark the event as handled
+                e.Handled = true;
+            }
+        }
+
         private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e)
         {
             ColorTextBox.Text = ColorPicker.SelectedColorText;
@@ -418,10 +424,7 @@ namespace HCI___Fashion
 
             TextRange selectionRange = new TextRange(EditorRichTextBox.Selection.Start, EditorRichTextBox.Selection.End);
 
-            if (selectionRange != null)
-            {
-                selectionRange.ApplyPropertyValue(TextElement.ForegroundProperty, brush);
-            }
+            selectionRange?.ApplyPropertyValue(TextElement.ForegroundProperty, brush);
 
         }
 
@@ -451,7 +454,6 @@ namespace HCI___Fashion
             NameTextBox.BorderBrush = Brushes.DarkCyan;
             NameTextBox.BorderThickness = new Thickness(3);
         }
-
 
     }
 
