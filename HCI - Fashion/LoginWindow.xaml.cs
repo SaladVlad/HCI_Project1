@@ -27,9 +27,9 @@ namespace HCI___Fashion
     {
         #region Fields
 
-        List<User> users;
+        readonly List<User> _users;
 
-        NotificationManager notificationManager;
+        readonly NotificationManager _notificationManager;
 
         #endregion
 
@@ -51,8 +51,8 @@ namespace HCI___Fashion
 
             InitializeComponent();
             DataIO io = new Helpers.DataIO();
-            users = io.DeSerializeObject<List<User>>("users.xml");
-            notificationManager = new NotificationManager();
+            _users = io.DeSerializeObject<List<User>>("users.xml");
+            _notificationManager = new NotificationManager();
             UsernameTextBox.Focus();
         }
         public bool IsConnectedToInternet()
@@ -78,7 +78,7 @@ namespace HCI___Fashion
             if (ValidateForm())
             {
                 User foundUser = null;
-                foreach(User u in users)
+                foreach(User u in _users)
                 {
                     if(u.Username.Equals(UsernameTextBox.Text) && u.Password.Equals(PasswordBox.Password))
                     {
@@ -111,15 +111,15 @@ namespace HCI___Fashion
         {
             if (semantic.Equals("usernameEmpty"))
             {
-                notificationManager.Show("Error","Username cannot be blank!",NotificationType.Error,"WindowNotificationArea");
+                _notificationManager.Show("Error","Username cannot be blank!",NotificationType.Error,"WindowNotificationArea");
             }
             if (semantic.Equals("passwordEmpty"))
             {
-                notificationManager.Show("Error", "Password cannot be blank!", NotificationType.Error, "WindowNotificationArea");
+                _notificationManager.Show("Error", "Password cannot be blank!", NotificationType.Error, "WindowNotificationArea");
             }
             if (semantic.Equals("accountNonExistent"))
             {
-                notificationManager.Show("Error", "User not found!", NotificationType.Error, "WindowNotificationArea");
+                _notificationManager.Show("Error", "User not found!", NotificationType.Error, "WindowNotificationArea");
             }
         }
 
